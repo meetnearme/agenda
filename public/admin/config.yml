@@ -1,0 +1,370 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'media: upload {{path}}'
+    deleteMedia: 'media: delete {{path}}'
+
+local_backend: true
+
+media_folder: public/img
+public_folder: /img
+
+publish_mode: editorial_workflow
+
+collections:
+  # Site Settings - appears first in sidebar for easy access
+  - name: settings
+    label: ⚙️ Site Settings
+    description: Configure your site name, branding, and newsletter settings
+    files:
+      - file: content/settings/index.md
+        label: Branding & Settings
+        name: settings
+        editor:
+          preview: false
+        fields:
+          - label: Site Name
+            name: sitename
+            widget: string
+            hint: Your newsletter/site name (appears in header and browser tab)
+          - label: Brand Color
+            name: brandcolor
+            widget: color
+            default: '#a3e635'
+            hint: Your primary accent color (buttons, links, highlights). Choose a color that represents your brand.
+          - label: Tagline
+            name: tagline
+            widget: string
+            hint: Short description shown below your site name
+          - label: Site Description
+            name: description
+            widget: text
+            hint: Longer description for search engines and social sharing
+          - label: Footer Text
+            name: footertext
+            widget: string
+            hint: Brief text shown in the footer
+          - label: Copyright Name
+            name: copyrightname
+            widget: string
+            hint: Name shown in copyright notice (e.g., "© 2026 Your Name")
+          - label: Social Links
+            name: sociallinks
+            widget: list
+            hint: Add links to your social media profiles
+            fields:
+              - label: Platform
+                name: platform
+                widget: select
+                options:
+                  - Twitter
+                  - Instagram
+                  - Facebook
+                  - LinkedIn
+                  - YouTube
+                  - TikTok
+              - label: URL
+                name: url
+                widget: string
+                hint: Full URL (e.g., https://twitter.com/yourname)
+          - label: Newsletter Button Text
+            name: newsletterbutton
+            widget: string
+            default: Subscribe Now
+            hint: Text shown on the subscribe button
+          - label: Subscriber Count
+            name: subscribercount
+            widget: string
+            hint: Number to display (e.g., "5,000+")
+          - label: Subscriber Count Text
+            name: subscribercounttext
+            widget: string
+            default: locals getting weekly event updates
+            hint: Text after the number
+
+  - name: blog
+    label: Blog
+    folder: content/blog
+    create: true
+    slug: index
+    media_folder: /public/content/blog/{{year}}/{{month}}/{{title}}
+    public_folder: ''
+    path: '{{year}}/{{month}}/{{title}}/index'
+    editor:
+      preview: true
+    fields:
+      - label: Template Key
+        name: templatekey
+        widget: hidden
+        default: blog-post
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - label: Description
+        name: description
+        widget: string
+        required: false
+      - label: Body
+        name: body
+        widget: markdown
+      - label: Featured Post
+        name: featuredpost
+        widget: boolean
+        required: false
+        default: false
+      - label: Featured Image
+        name: featuredimage
+        widget: image
+        required: false
+
+  - name: pages
+    label: Pages
+    folder: content/pages
+    create: true
+    slug: '{{title}}'
+    media_folder: /public/content/pages
+    public_folder: /content/pages
+    path: '{{title}}/index'
+    editor:
+      preview: true
+    fields:
+      - label: Template Key
+        name: templatekey
+        widget: hidden
+        default: page
+      - label: Title
+        name: title
+        widget: string
+      - label: Body
+        name: body
+        widget: markdown
+      - label: Featured Image
+        name: featuredimage
+        widget: image
+        required: false
+
+  - name: events
+    label: Events
+    files:
+      - file: content/events/index.md
+        label: Events Page
+        name: events
+        editor:
+          preview: true
+        fields:
+          - label: Template Key
+            name: templatekey
+            widget: hidden
+            default: events-page
+          - label: Page Title
+            name: title
+            widget: string
+          - label: Subtitle
+            name: subtitle
+            widget: string
+          - label: Embed Code
+            name: embedcode
+            widget: code
+            default_language: html
+            output_code_only: true
+            hint: Paste your Meet Near Me embed code here. This will replace the placeholder on the events page.
+          - label: Instructions Title
+            name: instructionstitle
+            widget: string
+            default: How to add your Meet Near Me embed
+          - label: Setup Instructions
+            name: instructions
+            widget: list
+            field:
+              label: Step
+              name: step
+              widget: string
+            hint: These instructions appear below the embed area. Remove them once you've added your embed code.
+          - label: Show Instructions
+            name: showInstructions
+            widget: boolean
+            default: true
+            hint: Toggle off to hide the instructions section once your embed is set up.
+
+  - name: template
+    label: Template Page
+    description: Configure the open source template marketing page
+    files:
+      - file: content/template/index.md
+        label: Template Page
+        name: template
+        editor:
+          preview: false
+        fields:
+          - label: Template Key
+            name: templatekey
+            widget: hidden
+            default: template-page
+          - label: Hero Title
+            name: title
+            widget: string
+          - label: Hero Subtitle
+            name: subtitle
+            widget: text
+          - label: Hero Badge
+            name: herobadge
+            widget: string
+            default: Free Open Source Template
+          - label: GitHub URL
+            name: githuburl
+            widget: string
+            hint: Full URL to your GitHub repository
+          - label: Netlify Deploy URL
+            name: netlifyurl
+            widget: string
+            hint: One-click deploy URL for Netlify
+          - label: Features
+            name: features
+            widget: list
+            hint: Feature cards shown on the template page
+            fields:
+              - label: Icon
+                name: icon
+                widget: select
+                options:
+                  - { label: 'Zap (Lightning)', value: 'zap' }
+                  - { label: 'Globe', value: 'globe' }
+                  - { label: 'Edit', value: 'edit' }
+                  - { label: 'Database', value: 'database' }
+                  - { label: 'Palette', value: 'palette' }
+                  - { label: 'Github', value: 'github' }
+                  - { label: 'Check', value: 'check' }
+              - label: Title
+                name: title
+                widget: string
+              - label: Description
+                name: description
+                widget: text
+          - label: How It Works Steps
+            name: steps
+            widget: list
+            fields:
+              - label: Step Title
+                name: title
+                widget: string
+              - label: Step Description
+                name: description
+                widget: text
+          - label: Tech Stack
+            name: techstack
+            widget: list
+            fields:
+              - label: Technology Name
+                name: name
+                widget: string
+              - label: Description
+                name: description
+                widget: string
+          - label: CTA Headline
+            name: ctaheadline
+            widget: string
+          - label: CTA Subtext
+            name: ctasubtext
+            widget: string
+          - label: CTA Footer
+            name: ctafooter
+            widget: string
+
+  - name: home
+    label: Home
+    files:
+      - file: content/home/index.md
+        label: Home Page
+        name: home
+        editor:
+          preview: true
+        fields:
+          - label: Template Key
+            name: templatekey
+            widget: hidden
+            default: index-page
+          - label: Title
+            name: title
+            widget: string
+          - label: Main Navigation
+            name: navigation
+            widget: list
+            fields:
+              - label: Display Text
+                name: title
+                widget: string
+              - label: URL Path
+                name: slug
+                widget: string
+              - label: Sub Navigation Items
+                name: subnav
+                widget: list
+                required: false
+                fields:
+                  - label: Display Text
+                    name: title
+                    widget: string
+                  - label: URL Path
+                    name: slug
+                    widget: string
+                  - label: Description
+                    name: description
+                    widget: text
+                    required: false
+          - label: Tagline
+            name: tagline
+            widget: string
+          - label: Home Quote
+            name: homequote
+            widget: text
+          - label: Featured Image
+            name: featuredimage
+            widget: image
+            required: false
+            media_folder: /public/content/home
+            public_folder: /content/home
+          - label: Footer Bio Image
+            name: footerbioimage
+            widget: image
+            required: false
+            media_folder: /public/content/home
+            public_folder: /content/home
+          - label: Footer Bio Text
+            name: footerbiotext
+            widget: text
+          - label: Social Links
+            name: sociallinks
+            widget: list
+            fields:
+              - label: Link Name
+                name: title
+                widget: string
+              - label: URL
+                name: url
+                widget: string
+          - label: Footer Meet Text
+            name: footermeettext
+            widget: text
+          - label: Footer Credits
+            name: footercredits
+            widget: list
+            fields:
+              - label: Text
+                name: text
+                widget: string
+              - label: Link Text
+                name: linktext
+                widget: string
+              - label: URL
+                name: url
+                widget: string
+          - label: Body
+            name: body
+            widget: markdown

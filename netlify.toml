@@ -1,0 +1,25 @@
+[build]
+  command = "pnpm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Redirects for Decap CMS
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/"
+  to = "/admin/index.html"
+  status = 200
+
+# Enable Netlify Identity for CMS authentication
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = true
+

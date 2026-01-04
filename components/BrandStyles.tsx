@@ -1,0 +1,83 @@
+'use client';
+
+/**
+ * BrandStyles Component
+ *
+ * Dynamically injects CSS variables for brand colors from CMS settings.
+ * Converts hex colors to OKLCH for optimal CSS color support.
+ */
+
+interface BrandStylesProps {
+  brandColor?: string;
+}
+
+/**
+ * Convert hex color to OKLCH
+ */
+function hexToOklch(hex: string): string {
+  // Remove # if present
+  hex = hex.replace(/^#/, '');
+
+  // Parse hex to RGB (0-255)
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Handle invalid hex
+  if (isNaN(r) || isNaN(g) || isNaN(b)) {
+    return 'oklch(0.87 0.18 127)'; // Default lime
+  }
+
+  // Convert to linear RGB (0-1, gamma corrected)
+  const toLinear = (c: number): number => {
+    c = c / 255;
+    return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+
+  const lr = toLinear(r);
+  const lg = toLinear(g);
+  const lb = toLinear(b);
+
+  // Linear RGB to XYZ (D65)
+  const x = 0.4124564 * lr + 0.3575761 * lg + 0.1804375 * lb;
+  const y = 0.2126729 * lr + 0.7151522 * lg + 0.0721750 * lb;
+  const z = 0.0193339 * lr + 0.1191920 * lg + 0.9503041 * lb;
+
+  // XYZ to OKLAB
+  const l_ = Math.cbrt(0.8189330101 * x + 0.3618667424 * y - 0.1288597137 * z);
+  const m_ = Math.cbrt(0.0329845436 * x + 0.9293118715 * y + 0.0361456387 * z);
+  const s_ = Math.cbrt(0.0482003018 * x + 0.2643662691 * y + 0.6338517070 * z);
+
+  const L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_;
+  const a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;
+  const bVal = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;
+
+  // OKLAB to OKLCH
+  const C = Math.sqrt(a * a + bVal * bVal);
+  let H = Math.atan2(bVal, a) * (180 / Math.PI);
+  if (H < 0) H += 360;
+
+  // Format with reasonable precision
+  return `oklch(${L.toFixed(2)} ${C.toFixed(2)} ${H.toFixed(0)})`;
+}
+
+export function BrandStyles({ brandColor }: BrandStylesProps) {
+  if (!brandColor) return null;
+
+  const oklchColor = hexToOklch(brandColor);
+
+  // Generate CSS custom properties
+  const cssVars = `
+    :root {
+      --primary: ${oklchColor};
+      --accent: ${oklchColor};
+      --ring: ${oklchColor};
+      --sidebar-primary: ${oklchColor};
+      --sidebar-ring: ${oklchColor};
+      --chart-1: ${oklchColor};
+    }
+  `;
+
+  return <style dangerouslySetInnerHTML={{ __html: cssVars }} />;
+}
+
