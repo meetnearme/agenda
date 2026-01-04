@@ -4,7 +4,7 @@ title: Local Agenda
 navigation:
   - title: Home
     slug: /
-  - title: Blog
+  - title: Updates
     slug: /blog
   - title: Events
     slug: /events

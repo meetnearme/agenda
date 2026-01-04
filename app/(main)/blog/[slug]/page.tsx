@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             className="mb-6 inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-primary"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
+            Back to Updates
           </Link>
 
           {/* Date and reading time */}
@@ -160,7 +160,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           {/* Post Navigation */}
           <nav
-            aria-label="Blog post navigation"
+            aria-label="Update navigation"
             className="mt-12 border-t border-border pt-8"
           >
             <div className="flex flex-wrap justify-between gap-4">

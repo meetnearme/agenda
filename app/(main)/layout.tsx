@@ -29,6 +29,7 @@ export default async function MainLayout({
         siteTitle={siteSettings?.sitename || 'Local Agenda'}
         siteDescription={siteSettings?.tagline || ''}
         nav={navigationItems}
+        newsletterSettings={siteSettings?.newsletter}
       />
       <main className="min-h-screen">{children}</main>
       <Footer

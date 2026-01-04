@@ -23,20 +23,20 @@ type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
  */
 function extractIframeSrc(embedCode: string): string | null {
   if (!embedCode) return null;
-  
+
   const trimmed = embedCode.trim();
-  
+
   // If it's already a URL, return it directly
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
     return trimmed;
   }
-  
+
   // Try to extract src from iframe tag
   const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
   if (srcMatch && srcMatch[1]) {
     return srcMatch[1];
   }
-  
+
   return null;
 }
 

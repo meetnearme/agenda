@@ -495,6 +495,7 @@ export interface NewsletterSettings {
   embedCode?: string;
   publicationId?: string;
   apiKey?: string;
+  subscribeUrl?: string;
 }
 
 /**

@@ -224,16 +224,29 @@ async function main() {
     '   Enter a short tagline for your newsletter:\n   (e.g., "Your Weekly Guide to Austin Events")\n\n   > '
   );
 
+  // 3b. Site Description (for SEO)
+  console.log('\n📝 STEP 3b: Site Description (SEO)\n');
+  console.log('   This appears in search results and social media shares.\n');
+  const siteDescription = await question(
+    '   Enter a longer description for your newsletter:\n   (e.g., "Discover the best local events in Austin every week. Subscribe for curated weekly event guides.")\n\n   > '
+  );
+
   // 4. Beehiiv Newsletter Integration
   console.log('\n📧 STEP 4: Newsletter Integration (Beehiiv)\n');
-  console.log('   Beehiiv is a newsletter platform that powers your subscriber signups.');
-  console.log('   You can set this up now or configure it later in Site Settings.\n');
+  console.log(
+    '   Beehiiv is a newsletter platform that powers your subscriber signups.'
+  );
+  console.log(
+    '   You can set this up now or configure it later in Site Settings.\n'
+  );
   console.log('   Options:');
   console.log('   1. Skip for now (configure later in CMS)');
   console.log('   2. Iframe Embed (works on all Beehiiv tiers)');
   console.log('   3. Native Form (requires Beehiiv API access)\n');
 
-  const beehiivChoice = await question('   Enter choice (1-3) or press Enter to skip: ');
+  const beehiivChoice = await question(
+    '   Enter choice (1-3) or press Enter to skip: '
+  );
 
   let beehiivMode = 'iframe';
   let beehiivEmbedCode = '';
@@ -246,7 +259,9 @@ async function main() {
     console.log('   2. Create or select a form');
     console.log('   3. Click "Get Embed Code" and copy the iframe code\n');
 
-    const embedCode = await question('   Paste your Beehiiv embed code (or press Enter to skip):\n   > ');
+    const embedCode = await question(
+      '   Paste your Beehiiv embed code (or press Enter to skip):\n   > '
+    );
     if (embedCode.trim()) {
       beehiivEmbedCode = embedCode.trim();
       console.log('   ✓ Embed code saved');
@@ -260,30 +275,54 @@ async function main() {
     console.log('   2. Copy your Publication ID');
     console.log('   3. Create a new API Key\n');
 
-    const pubId = await question('   Enter your Publication ID (or press Enter to skip):\n   > ');
+    const pubId = await question(
+      '   Enter your Publication ID (or press Enter to skip):\n   > '
+    );
     if (pubId.trim()) {
       beehiivPublicationId = pubId.trim();
       console.log('   ✓ Publication ID saved');
     }
 
-    const apiKey = await question('\n   Enter your API Key (or press Enter to skip):\n   > ');
+    const apiKey = await question(
+      '\n   Enter your API Key (or press Enter to skip):\n   > '
+    );
     if (apiKey.trim()) {
       beehiivApiKey = apiKey.trim();
       console.log('   ✓ API Key saved');
     }
 
     if (!pubId.trim() || !apiKey.trim()) {
-      console.log('   ⚠ Incomplete - you can add credentials later in Site Settings');
+      console.log(
+        '   ⚠ Incomplete - you can add credentials later in Site Settings'
+      );
     }
   } else {
-    console.log('   ✓ Skipped - you can configure Beehiiv later in Site Settings');
+    console.log(
+      '   ✓ Skipped - you can configure Beehiiv later in Site Settings'
+    );
+  }
+
+  // Ask for Subscribe Page URL (used by header button)
+  console.log('\n   📎 Subscribe Page URL');
+  console.log('   This URL is used by the "Subscribe" button in the header.');
+  console.log('   Format: https://yourname.beehiiv.com/subscribe\n');
+
+  let beehiivSubscribeUrl = '';
+  const subscribeUrlInput = await question(
+    '   Enter your Beehiiv subscribe page URL (or press Enter to skip):\n   > '
+  );
+  if (subscribeUrlInput.trim()) {
+    beehiivSubscribeUrl = subscribeUrlInput.trim();
+    console.log('   ✓ Subscribe URL saved');
+  } else {
+    console.log('   ⚠ Skipped - button will scroll to signup form instead');
   }
 
   // 5. Confirm cleanup
   console.log('\n🧹 STEP 5: Cleanup\n');
   console.log('   The following will be removed:');
   console.log('   • Template page (/template)');
-  console.log('   • Sample blog post');
+  console.log('   • Sample update post');
   console.log('   • This setup script\n');
 
   const confirmCleanup = await question('   Proceed with cleanup? (Y/n): ');
@@ -398,7 +437,12 @@ async function main() {
   console.log('   ✓ Brand color saved to CMS settings\n');
 
   // Update Beehiiv settings
-  if (beehiivEmbedCode || beehiivPublicationId || beehiivApiKey) {
+  if (
+    beehiivEmbedCode ||
+    beehiivPublicationId ||
+    beehiivApiKey ||
+    beehiivSubscribeUrl
+  ) {
     console.log('📧 Saving Beehiiv settings...');
     let currentSettings = fs.readFileSync(settingsPath, 'utf8');
 
@@ -431,6 +475,14 @@ async function main() {
       currentSettings = currentSettings.replace(
         /apiKey: .*/,
         `apiKey: '${beehiivApiKey}'`
+      );
+    }
+
+    // Update subscribe URL
+    if (beehiivSubscribeUrl) {
+      currentSettings = currentSettings.replace(
+        /subscribeUrl: .*/,
+        `subscribeUrl: '${beehiivSubscribeUrl}'`
       );
     }
 
@@ -470,10 +522,10 @@ async function main() {
     deleteDirectory(path.join(ROOT_DIR, 'content/template'));
     console.log('   ✓ Template page removed\n');
 
-    // Remove sample blog post
-    console.log('🗑️  Removing sample blog post...');
+    // Remove sample update post
+    console.log('🗑️  Removing sample update post...');
     deleteDirectory(path.join(ROOT_DIR, 'content/blog/2026'));
-    console.log('   ✓ Sample blog post removed\n');
+    console.log('   ✓ Sample update post removed\n');
 
     // Remove Template from navigation
     console.log('📄 Updating navigation...');

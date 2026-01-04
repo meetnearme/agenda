@@ -7,7 +7,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog - Weekly Event Guides',
+  title: 'Updates - Weekly Event Guides',
   description:
     'Curated lists of the best events happening around your city, published every Monday.',
 };

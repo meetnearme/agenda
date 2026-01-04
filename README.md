@@ -73,13 +73,13 @@ After deploying to Netlify:
 ├── app/                    # Next.js App Router pages
 │   ├── (main)/            # Main site routes
 │   │   ├── page.tsx       # Homepage
-│   │   ├── blog/          # Blog listing & posts
+│   │   ├── blog/          # Updates listing & posts
 │   │   ├── events/        # Events page
 │   │   └── template/      # Template info page
 │   └── globals.css        # Global styles & theme
 ├── components/            # React components
 ├── content/               # Markdown content (CMS-managed)
-│   ├── blog/             # Blog posts
+│   ├── blog/             # Update posts
 │   ├── events/           # Events page content
 │   ├── home/             # Homepage content & navigation
 │   └── settings/         # Site branding & settings

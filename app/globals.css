@@ -1,10 +1,9 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ATX Agenda Theme - Bold & Dark with Lime Accents */
   --background: oklch(0.12 0 0); /* Near black */
   --foreground: oklch(0.98 0 0); /* Pure white */
   --card: oklch(0.16 0 0); /* Dark gray cards */
@@ -44,8 +43,10 @@
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", monospace;
+  --font-sans:
+    'Geist', 'Geist Fallback', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -117,4 +118,3 @@ html {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-

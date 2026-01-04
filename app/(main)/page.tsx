@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { ArrowRight, Calendar, Mail, Users, Code2 } from 'lucide-react';
 import Link from 'next/link';
 import { getAllPosts, getSiteSettings } from '@/lib/markdown';
 import { BlogPostGrid } from '@/components/blog';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default async function HomePage() {
   const [posts, siteSettings] = await Promise.all([
@@ -34,23 +34,13 @@ export default async function HomePage() {
               community gatherings happening every week.
             </p>
 
-            {/* Newsletter Signup Placeholder */}
-            <div className="mx-auto max-w-xl pt-8">
-              <form className="flex flex-col gap-3 sm:flex-row">
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="h-12 flex-1 border-border bg-input text-foreground placeholder:text-muted-foreground"
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="h-12 bg-primary px-8 font-semibold text-primary-foreground hover:bg-primary/90"
-                >
-                  {newsletterButton}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </form>
+            {/* Newsletter Signup */}
+            <div id="newsletter-signup" className="mx-auto max-w-xl pt-8">
+              <NewsletterSignup
+                settings={siteSettings?.newsletter}
+                buttonText={newsletterButton}
+                variant="compact"
+              />
               <p className="mt-3 text-sm text-muted-foreground">
                 Join {subscriberCount} {subscriberText}
               </p>
@@ -192,21 +182,11 @@ export default async function HomePage() {
           </p>
 
           <div className="mx-auto max-w-xl">
-            <form className="flex flex-col gap-3 sm:flex-row">
-              <Input
-                type="email"
-                placeholder="Your email address"
-                className="h-12 flex-1 border-border bg-input text-foreground placeholder:text-muted-foreground"
-              />
-              <Button
-                type="submit"
-                size="lg"
-                className="h-12 bg-primary px-8 font-semibold text-primary-foreground hover:bg-primary/90"
-              >
-                Subscribe Free
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
+            <NewsletterSignup
+              settings={siteSettings?.newsletter}
+              buttonText="Subscribe Free"
+              variant="compact"
+            />
           </div>
         </div>
       </section>

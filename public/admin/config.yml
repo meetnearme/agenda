@@ -119,9 +119,14 @@ collections:
                 widget: string
                 hint: 'For native mode: Settings > API > Create New API Key (keep secret!)'
                 required: false
+              - label: Subscribe Page URL
+                name: subscribeUrl
+                widget: string
+                hint: 'URL for the header Subscribe button (e.g., https://yourname.beehiiv.com/subscribe)'
+                required: false
 
   - name: blog
-    label: Blog
+    label: Updates
     folder: content/blog
     create: true
     slug: index

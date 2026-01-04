@@ -10,7 +10,7 @@ export const navigationItems: NavItem[] = [
     slug: '/',
   },
   {
-    title: 'Blog',
+    title: 'Updates',
     slug: '/blog',
   },
   {

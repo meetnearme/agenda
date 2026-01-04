@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import type { NewsletterSettings } from '@/lib/markdown';
 
 interface NavItem {
   title: string;
@@ -19,10 +20,23 @@ interface HeaderProps {
   siteTitle: string;
   siteDescription?: string;
   nav: NavItem[];
+  newsletterSettings?: NewsletterSettings;
 }
 
-export default function Header({ siteTitle, nav }: HeaderProps) {
+export default function Header({ siteTitle, nav, newsletterSettings }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Get the subscribe URL from settings, or fallback to scrolling to form
+  const subscribeUrl = newsletterSettings?.subscribeUrl;
+
+  const handleSubscribeClick = () => {
+    if (subscribeUrl) {
+      window.open(subscribeUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      // Scroll to newsletter section on the page
+      document.getElementById('newsletter-signup')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -52,6 +66,7 @@ export default function Header({ siteTitle, nav }: HeaderProps) {
             <Button
               size="sm"
               className="bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
+              onClick={handleSubscribeClick}
             >
               Subscribe
             </Button>
@@ -88,6 +103,10 @@ export default function Header({ siteTitle, nav }: HeaderProps) {
               <Button
                 size="sm"
                 className="mt-2 bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleSubscribeClick();
+                }}
               >
                 Subscribe
               </Button>
