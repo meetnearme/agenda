@@ -16,4 +16,9 @@ subscribercount: 5,000+
 subscribercounttext: locals getting weekly event updates
 newslettercta: Subscribe to our newsletter
 newsletterplaceholder: Enter your email address
+newsletter:
+  mode: iframe
+  embedCode: ''
+  publicationId: ''
+  apiKey: ''
 ---

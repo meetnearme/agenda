@@ -85,6 +85,40 @@ collections:
             widget: string
             default: locals getting weekly event updates
             hint: Text after the number
+          - label: Newsletter Integration
+            name: newsletter
+            widget: object
+            collapsed: true
+            fields:
+              - label: Integration Mode
+                name: mode
+                widget: select
+                options:
+                  - {
+                      label: 'Iframe Embed (works on all tiers)',
+                      value: 'iframe',
+                    }
+                  - {
+                      label: 'Native Form (requires API access)',
+                      value: 'native',
+                    }
+                default: iframe
+                hint: Native mode uses your site's styling. Requires Beehiiv API access (Stripe verification required).
+              - label: Beehiiv Embed Code
+                name: embedCode
+                widget: text
+                hint: 'For iframe mode: Paste the full embed code from Beehiiv (Audience > Subscribe Forms > Get Embed Code)'
+                required: false
+              - label: Beehiiv Publication ID
+                name: publicationId
+                widget: string
+                hint: 'For native mode: Settings > API > Publication ID'
+                required: false
+              - label: Beehiiv API Key
+                name: apiKey
+                widget: string
+                hint: 'For native mode: Settings > API > Create New API Key (keep secret!)'
+                required: false
 
   - name: blog
     label: Blog

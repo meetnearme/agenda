@@ -224,8 +224,63 @@ async function main() {
     '   Enter a short tagline for your newsletter:\n   (e.g., "Your Weekly Guide to Austin Events")\n\n   > '
   );
 
-  // 4. Confirm cleanup
-  console.log('\n🧹 STEP 4: Cleanup\n');
+  // 4. Beehiiv Newsletter Integration
+  console.log('\n📧 STEP 4: Newsletter Integration (Beehiiv)\n');
+  console.log('   Beehiiv is a newsletter platform that powers your subscriber signups.');
+  console.log('   You can set this up now or configure it later in Site Settings.\n');
+  console.log('   Options:');
+  console.log('   1. Skip for now (configure later in CMS)');
+  console.log('   2. Iframe Embed (works on all Beehiiv tiers)');
+  console.log('   3. Native Form (requires Beehiiv API access)\n');
+
+  const beehiivChoice = await question('   Enter choice (1-3) or press Enter to skip: ');
+
+  let beehiivMode = 'iframe';
+  let beehiivEmbedCode = '';
+  let beehiivPublicationId = '';
+  let beehiivApiKey = '';
+
+  if (beehiivChoice.trim() === '2') {
+    console.log('\n   To get your embed code:');
+    console.log('   1. Go to Beehiiv → Audience → Subscribe Forms');
+    console.log('   2. Create or select a form');
+    console.log('   3. Click "Get Embed Code" and copy the iframe code\n');
+
+    const embedCode = await question('   Paste your Beehiiv embed code (or press Enter to skip):\n   > ');
+    if (embedCode.trim()) {
+      beehiivEmbedCode = embedCode.trim();
+      console.log('   ✓ Embed code saved');
+    } else {
+      console.log('   ⚠ Skipped - you can add this later in Site Settings');
+    }
+  } else if (beehiivChoice.trim() === '3') {
+    beehiivMode = 'native';
+    console.log('\n   To get your API credentials:');
+    console.log('   1. Go to Beehiiv → Settings → API');
+    console.log('   2. Copy your Publication ID');
+    console.log('   3. Create a new API Key\n');
+
+    const pubId = await question('   Enter your Publication ID (or press Enter to skip):\n   > ');
+    if (pubId.trim()) {
+      beehiivPublicationId = pubId.trim();
+      console.log('   ✓ Publication ID saved');
+    }
+
+    const apiKey = await question('\n   Enter your API Key (or press Enter to skip):\n   > ');
+    if (apiKey.trim()) {
+      beehiivApiKey = apiKey.trim();
+      console.log('   ✓ API Key saved');
+    }
+
+    if (!pubId.trim() || !apiKey.trim()) {
+      console.log('   ⚠ Incomplete - you can add credentials later in Site Settings');
+    }
+  } else {
+    console.log('   ✓ Skipped - you can configure Beehiiv later in Site Settings');
+  }
+
+  // 5. Confirm cleanup
+  console.log('\n🧹 STEP 5: Cleanup\n');
   console.log('   The following will be removed:');
   console.log('   • Template page (/template)');
   console.log('   • Sample blog post');
@@ -341,6 +396,47 @@ async function main() {
     fs.writeFileSync(settingsPath, updatedSettings);
   }
   console.log('   ✓ Brand color saved to CMS settings\n');
+
+  // Update Beehiiv settings
+  if (beehiivEmbedCode || beehiivPublicationId || beehiivApiKey) {
+    console.log('📧 Saving Beehiiv settings...');
+    let currentSettings = fs.readFileSync(settingsPath, 'utf8');
+
+    // Update newsletter mode
+    currentSettings = currentSettings.replace(
+      /newsletter:\s*\n\s*mode: .*/,
+      `newsletter:\n  mode: ${beehiivMode}`
+    );
+
+    // Update embed code
+    if (beehiivEmbedCode) {
+      // Escape single quotes in embed code for YAML
+      const escapedEmbedCode = beehiivEmbedCode.replace(/'/g, "''");
+      currentSettings = currentSettings.replace(
+        /embedCode: .*/,
+        `embedCode: '${escapedEmbedCode}'`
+      );
+    }
+
+    // Update publication ID
+    if (beehiivPublicationId) {
+      currentSettings = currentSettings.replace(
+        /publicationId: .*/,
+        `publicationId: '${beehiivPublicationId}'`
+      );
+    }
+
+    // Update API key
+    if (beehiivApiKey) {
+      currentSettings = currentSettings.replace(
+        /apiKey: .*/,
+        `apiKey: '${beehiivApiKey}'`
+      );
+    }
+
+    fs.writeFileSync(settingsPath, currentSettings);
+    console.log('   ✓ Beehiiv settings saved\n');
+  }
 
   // Update layout metadata
   console.log('📄 Updating page metadata...');

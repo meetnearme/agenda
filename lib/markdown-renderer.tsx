@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { BlogPostGrid } from '@/components/blog';
+import NewsletterSignup from '@/components/NewsletterSignup';
 import type { BlogPostWithMetadata } from '@/types/content.types';
+import type { NewsletterSettings } from '@/lib/markdown';
 
 // Component for vertical tiles grid specific to markdown parsing
 interface VerticalTilesGridProps {
@@ -125,6 +127,7 @@ interface MarkdownRendererProps {
   className?: string;
   imagePath?: string;
   posts?: BlogPostWithMetadata[];
+  newsletterSettings?: NewsletterSettings;
 }
 
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
@@ -132,6 +135,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   className = '',
   imagePath = '',
   posts = [],
+  newsletterSettings,
 }) => {
   // Process the content to handle custom components
   const processedContent = React.useMemo(() => {
@@ -223,6 +227,42 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         currentContent = afterPostGrid;
       }
 
+      // Handle newsletter-signup
+      const newsletterMatch = currentContent.match(
+        /<newsletter-signup\s*\/>/i
+      );
+      if (newsletterMatch) {
+        const beforeNewsletter = currentContent.substring(
+          0,
+          newsletterMatch.index
+        );
+        const afterNewsletter = currentContent.substring(
+          newsletterMatch.index! + newsletterMatch[0].length
+        );
+
+        // Add content before newsletter
+        if (beforeNewsletter.trim()) {
+          parts.push(
+            <div
+              key={`before-newsletter-${partIndex++}`}
+              dangerouslySetInnerHTML={{ __html: beforeNewsletter }}
+            />
+          );
+        }
+
+        // Add newsletter signup component
+        parts.push(
+          <div key={`newsletter-${partIndex++}`} className="my-8">
+            <NewsletterSignup
+              settings={newsletterSettings}
+              variant="card"
+            />
+          </div>
+        );
+
+        currentContent = afterNewsletter;
+      }
+
       // Add any remaining content
       if (currentContent.trim()) {
         parts.push(
@@ -249,7 +289,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         dangerouslySetInnerHTML={{ __html: processed }}
       />
     );
-  }, [content, className, imagePath, posts]);
+  }, [content, className, imagePath, posts, newsletterSettings]);
 
   return <>{processedContent}</>;
 };

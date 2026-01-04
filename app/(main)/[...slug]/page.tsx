@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPageBySlug, getAllPages } from '@/lib/markdown';
+import { getPageBySlug, getAllPages, getSiteSettings } from '@/lib/markdown';
 import MarkdownRenderer from '@/lib/markdown-renderer';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -47,7 +47,10 @@ export default async function DynamicPage({ params }: Props) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug.join('/');
 
-  const pageData = await getPageBySlug(slug);
+  const [pageData, siteSettings] = await Promise.all([
+    getPageBySlug(slug),
+    getSiteSettings(),
+  ]);
 
   if (!pageData) {
     notFound();
@@ -86,6 +89,7 @@ export default async function DynamicPage({ params }: Props) {
           <MarkdownRenderer
             content={pageData.htmlContent || ''}
             imagePath={imagePath}
+            newsletterSettings={siteSettings?.newsletter}
           />
         </div>
       </article>

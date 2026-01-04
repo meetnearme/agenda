@@ -488,6 +488,16 @@ export async function getEventsContent(): Promise<EventsContentWithMetadata | nu
 }
 
 /**
+ * Newsletter integration settings
+ */
+export interface NewsletterSettings {
+  mode: 'iframe' | 'native';
+  embedCode?: string;
+  publicationId?: string;
+  apiKey?: string;
+}
+
+/**
  * Site settings content type
  */
 export interface SiteSettings {
@@ -501,6 +511,7 @@ export interface SiteSettings {
   newsletterbutton: string;
   subscribercount: string;
   subscribercounttext: string;
+  newsletter?: NewsletterSettings;
 }
 
 /**

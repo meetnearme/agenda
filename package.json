@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@beehiiv/sdk": "^0.1.9",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@netlify/functions": "^5.1.2",
     "@tailwindcss/postcss": "^4",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
@@ -53,4 +55,3 @@
     "typescript": "^5"
   }
 }
-

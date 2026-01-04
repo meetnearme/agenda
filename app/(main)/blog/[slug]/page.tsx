@@ -3,6 +3,7 @@ import {
   getAdjacentPosts,
   getPostPaths,
   getAllPosts,
+  getSiteSettings,
 } from '@/lib/markdown';
 import MarkdownRenderer from '@/lib/markdown-renderer';
 import Link from 'next/link';
@@ -84,8 +85,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { frontmatter, htmlContent, formattedDate, readingTime, imageBasePath } =
     post;
 
-  const adjacentPosts = await getAdjacentPosts(post.slug);
-  const allPosts = await getAllPosts();
+  const [adjacentPosts, allPosts, siteSettings] = await Promise.all([
+    getAdjacentPosts(post.slug),
+    getAllPosts(),
+    getSiteSettings(),
+  ]);
   const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
@@ -148,7 +152,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           itemProp="articleBody"
         >
           <div className="prose prose-lg prose-invert max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-code:text-primary">
-            <MarkdownRenderer content={htmlContent || ''} />
+            <MarkdownRenderer
+              content={htmlContent || ''}
+              newsletterSettings={siteSettings?.newsletter}
+            />
           </div>
 
           {/* Post Navigation */}
