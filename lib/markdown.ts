@@ -17,7 +17,9 @@ const contentDirectory = path.join(process.cwd(), 'content');
 /**
  * Get the content directory path for a specific content type
  */
-function getContentDirectory(contentType: 'updates' | 'pages' | 'home'): string {
+function getContentDirectory(
+  contentType: 'updates' | 'pages' | 'home'
+): string {
   return path.join(contentDirectory, contentType);
 }
 
@@ -501,9 +503,16 @@ export interface NewsletterSettings {
 /**
  * Site settings content type
  */
+export interface HeroImages {
+  left?: string;
+  right?: string;
+  opacity?: number;
+}
+
 export interface SiteSettings {
   sitename: string;
   brandcolor: string;
+  heroimages?: HeroImages;
   tagline: string;
   description: string;
   footertext: string;
@@ -579,4 +588,3 @@ export async function searchPosts(
     return searchableContent.includes(lowercaseQuery);
   });
 }
-

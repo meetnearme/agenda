@@ -18,11 +18,40 @@ export default async function HomePage() {
     siteSettings?.subscribercounttext || 'locals getting weekly event updates';
   const newsletterButton = siteSettings?.newsletterbutton || 'Subscribe Now';
 
+  // Hero images with defaults
+  const heroLeftImage =
+    siteSettings?.heroimages?.left ||
+    '/content/home/cat_arts-community_00.jpeg';
+  const heroRightImage =
+    siteSettings?.heroimages?.right ||
+    '/content/home/cat_health-wellness_00.jpeg';
+  const heroOpacity = siteSettings?.heroimages?.opacity ?? 0.2;
+
   return (
     <main className="bg-background min-h-screen">
       {/* Hero Section */}
-      <section className="relative px-4 py-20 md:py-32">
-        <div className="container mx-auto max-w-6xl">
+      <section className="relative overflow-hidden px-4 py-20 md:py-32">
+        {/* Background Images - Side by Side (configurable via CMS) */}
+        <div className="absolute inset-0 flex">
+          <div
+            className="h-full w-1/2 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${heroLeftImage})`,
+              opacity: heroOpacity,
+            }}
+          />
+          <div
+            className="h-full w-1/2 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${heroRightImage})`,
+              opacity: heroOpacity,
+            }}
+          />
+        </div>
+        {/* Gradient overlay for better text readability */}
+        <div className="from-background/50 via-background/80 to-background absolute inset-0 bg-gradient-to-b" />
+
+        <div className="relative z-10 container mx-auto max-w-6xl">
           <div className="space-y-6 text-center">
             <h1 className="text-5xl font-bold tracking-tight text-balance md:text-7xl">
               YOUR WEEKLY GUIDE TO

@@ -1,6 +1,10 @@
 ---
 sitename: Local Agenda
 brandcolor: '#a3e635'
+heroimages:
+  left: /content/home/cat_arts-community_00.jpeg
+  right: /content/home/cat_health-wellness_00.jpeg
+  opacity: 0.8
 tagline: Your Weekly Guide to Local Events
 description:
   A hyper-local events newsletter template built with Next.js, Tailwind CSS, and Decap CMS. Fork this project to create your own community newsletter.
