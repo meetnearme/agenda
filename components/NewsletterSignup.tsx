@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
@@ -18,26 +18,17 @@ interface NewsletterSignupProps {
 type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 /**
- * Extract iframe src URL from embed code
- * Handles both full embed code and direct URLs
+ * Check if embed code contains valid Beehiiv embed
  */
-function extractIframeSrc(embedCode: string): string | null {
-  if (!embedCode) return null;
-
+function hasValidEmbedCode(embedCode: string): boolean {
+  if (!embedCode) return false;
   const trimmed = embedCode.trim();
-
-  // If it's already a URL, return it directly
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    return trimmed;
-  }
-
-  // Try to extract src from iframe tag
-  const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
-  if (srcMatch && srcMatch[1]) {
-    return srcMatch[1];
-  }
-
-  return null;
+  // Check for iframe or script tags from Beehiiv
+  return (
+    trimmed.includes('beehiiv') ||
+    trimmed.includes('<iframe') ||
+    trimmed.includes('<script')
+  );
 }
 
 /**
@@ -58,16 +49,64 @@ export default function NewsletterSignup({
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const embedContainerRef = useRef<HTMLDivElement>(null);
 
   const mode = settings?.mode || 'iframe';
   const embedCode = settings?.embedCode;
-  const embedUrl = extractIframeSrc(embedCode || '');
   const publicationId = settings?.publicationId;
   const apiKey = settings?.apiKey;
 
   // Check if we have the required configuration
   const isConfigured =
-    mode === 'iframe' ? !!embedUrl : !!(publicationId && apiKey);
+    mode === 'iframe' ? hasValidEmbedCode(embedCode || '') : !!(publicationId && apiKey);
+
+  // Effect to inject and execute the Beehiiv embed code (including script)
+  useEffect(() => {
+    if (mode !== 'iframe' || !embedCode || !embedContainerRef.current) return;
+
+    const container = embedContainerRef.current;
+
+    // Clear previous content
+    container.innerHTML = '';
+
+    // Parse the embed code and inject it properly
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = embedCode;
+
+    // Extract and execute scripts separately (scripts inserted via innerHTML don't execute)
+    const scripts = tempDiv.querySelectorAll('script');
+    scripts.forEach((script) => {
+      const newScript = document.createElement('script');
+      if (script.src) {
+        newScript.src = script.src;
+        newScript.async = true;
+      } else {
+        newScript.textContent = script.textContent;
+      }
+      // Remove original script from tempDiv
+      script.remove();
+    });
+
+    // Append non-script content first
+    container.innerHTML = tempDiv.innerHTML;
+
+    // Then append and execute scripts
+    scripts.forEach((script) => {
+      const newScript = document.createElement('script');
+      if (script.src) {
+        newScript.src = script.src;
+        newScript.async = true;
+      } else {
+        newScript.textContent = script.textContent;
+      }
+      container.appendChild(newScript);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      container.innerHTML = '';
+    };
+  }, [mode, embedCode]);
 
   // Handle native form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -128,8 +167,8 @@ export default function NewsletterSignup({
     );
   }
 
-  // Render iframe mode
-  if (mode === 'iframe' && embedUrl) {
+  // Render iframe mode - uses full embed code with script
+  if (mode === 'iframe' && hasValidEmbedCode(embedCode || '')) {
     return (
       <div className={`newsletter-signup-iframe ${className}`}>
         {title && (
@@ -138,22 +177,11 @@ export default function NewsletterSignup({
         {description && (
           <p className="mb-4 text-muted-foreground">{description}</p>
         )}
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <iframe
-            src={embedUrl}
-            data-test-id="beehiiv-embed"
-            width="100%"
-            height="320"
-            frameBorder="0"
-            scrolling="no"
-            className="block"
-            style={{
-              backgroundColor: 'transparent',
-              margin: 0,
-            }}
-            title="Newsletter Signup"
-          />
-        </div>
+        <div
+          ref={embedContainerRef}
+          className="beehiiv-embed-container overflow-hidden rounded-lg"
+          style={{ minHeight: '320px' }}
+        />
       </div>
     );
   }

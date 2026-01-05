@@ -134,6 +134,75 @@ function deleteFile(filePath) {
 }
 
 /**
+ * Recursively copy a directory
+ * @param {string} src - Source directory
+ * @param {string} dest - Destination directory
+ */
+function copyDirectory(src, dest) {
+  if (!fs.existsSync(src)) {
+    return false;
+  }
+
+  // Create destination if it doesn't exist
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Copy site-specific content from config content directory
+ * @param {string} contentDir - Path to content directory relative to ROOT_DIR
+ */
+function copySiteContent(contentDir) {
+  const srcDir = path.join(ROOT_DIR, contentDir);
+
+  if (!fs.existsSync(srcDir)) {
+    console.log(`   ⚠ Content directory not found: ${srcDir}`);
+    return;
+  }
+
+  console.log('📁 Copying site-specific content...');
+
+  // Copy updates if they exist
+  const updatesDir = path.join(srcDir, 'updates');
+  if (fs.existsSync(updatesDir)) {
+    const destUpdatesDir = path.join(ROOT_DIR, 'content/updates');
+    // Clear existing updates first
+    if (fs.existsSync(destUpdatesDir)) {
+      deleteDirectory(destUpdatesDir);
+      console.log('   ✓ Existing updates cleared');
+    }
+    copyDirectory(updatesDir, destUpdatesDir);
+    console.log('   ✓ Updates copied');
+  }
+
+  // Copy public assets if they exist (for images referenced in updates)
+  const publicDir = path.join(srcDir, 'public');
+  if (fs.existsSync(publicDir)) {
+    const destPublicDir = path.join(ROOT_DIR, 'public');
+    copyDirectory(publicDir, destPublicDir);
+    console.log('   ✓ Public assets copied');
+  }
+
+  console.log('');
+}
+
+/**
  * Remove template page and all references to it
  */
 function removeTemplatePage() {
@@ -203,8 +272,15 @@ function removeTemplatePage() {
  * Apply configuration values (from config file or interactive input)
  */
 function applyConfiguration(config) {
-  const { orgName, tagline, description, brandColor, beehiiv, removeTemplate } =
-    config;
+  const {
+    orgName,
+    tagline,
+    description,
+    brandColor,
+    beehiiv,
+    removeTemplate,
+    contentDir,
+  } = config;
 
   const primaryColorHex = brandColor || COLOR_PRESETS.lime.hex;
   const primaryColorOklch = isValidHex(primaryColorHex)
@@ -389,6 +465,11 @@ function applyConfiguration(config) {
     );
   }
   console.log('   ✓ Navigation updated\n');
+
+  // Copy site-specific content if contentDir is specified
+  if (contentDir) {
+    copySiteContent(contentDir);
+  }
 
   // Remove template if requested
   if (removeTemplate) {
