@@ -2,6 +2,10 @@
 
 A free, open-source template for creating hyper-local community newsletters. Built with Next.js 16, Tailwind CSS, and Decap CMS.
 
+<!-- Netlify Status Badges (update URLs after creating Netlify sites) -->
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE-NAME/deploys)
+
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/local-newsletter)
 
 ## Features
@@ -53,6 +57,40 @@ Run `pnpm setup` to customize the template for your newsletter. The wizard will:
 4. **Clean up boilerplate** - Removes template page, sample posts, and setup files
 
 After running setup, your newsletter is ready to customize via the CMS!
+
+## CI/CD & Multiple Deployments
+
+This template supports multiple Netlify deployments from a single repository using environment variables.
+
+### Environment-Based Builds
+
+Set the `SITE_CONFIG` environment variable in your Netlify site settings to control which configuration is used:
+
+| Netlify Site    | Environment Variable     | Behavior                                              |
+| --------------- | ------------------------ | ----------------------------------------------------- |
+| Production Site | `SITE_CONFIG=atx-agenda` | Uses `config/atx-agenda.json`, removes template page  |
+| Marketing Site  | `SITE_CONFIG=marketing`  | Uses `config/marketing.json`, keeps template page     |
+| Customer Forks  | _(not set)_              | Removes template, uses defaults for CMS configuration |
+
+### Configuration Files
+
+Pre-configured settings are stored in `config/`:
+
+- `config/atx-agenda.json` - Production site configuration
+- `config/marketing.json` - Marketing/demo site configuration
+
+### Local Testing
+
+```bash
+# Test ATX Agenda build
+pnpm build:atx-agenda
+
+# Test Marketing build
+pnpm build:marketing
+
+# Test Fork build (no config)
+pnpm build:fork
+```
 
 ## CMS Setup (Netlify Identity)
 

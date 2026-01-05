@@ -14,13 +14,13 @@ import { ArrowLeft, ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BlogPostGrid } from '@/components/blog';
 
-interface BlogPostPageProps {
+interface UpdatePostPageProps {
   params: Promise<{
     slug: string;
   }>;
 }
 
-// Generate static params for all blog posts
+// Generate static params for all update posts
 export async function generateStaticParams() {
   const paths = getPostPaths();
 
@@ -32,9 +32,9 @@ export async function generateStaticParams() {
 // Generate metadata for SEO
 export async function generateMetadata({
   params,
-}: BlogPostPageProps): Promise<Metadata> {
+}: UpdatePostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(`/blog/${slug}`);
+  const post = await getPostBySlug(`/updates/${slug}`);
 
   if (!post) {
     return {
@@ -55,7 +55,7 @@ export async function generateMetadata({
       ...(frontmatter.featuredimage && {
         images: [
           {
-            url: `/content/blog/${imageBasePath}/${frontmatter.featuredimage}`,
+            url: `/content/updates/${imageBasePath}/${frontmatter.featuredimage}`,
             alt: frontmatter.title,
           },
         ],
@@ -67,16 +67,16 @@ export async function generateMetadata({
       description: frontmatter.description || post.excerpt,
       ...(frontmatter.featuredimage && {
         images: [
-          `/content/blog/${imageBasePath}/${frontmatter.featuredimage}`,
+          `/content/updates/${imageBasePath}/${frontmatter.featuredimage}`,
         ],
       }),
     },
   };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function UpdatePostPage({ params }: UpdatePostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(`/blog/${slug}`);
+  const post = await getPostBySlug(`/updates/${slug}`);
 
   if (!post) {
     notFound();
@@ -99,7 +99,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {frontmatter.featuredimage && (
           <div className="relative h-64 w-full overflow-hidden md:h-80 lg:h-96">
             <Image
-              src={`/content/blog/${imageBasePath}/${frontmatter.featuredimage}`}
+              src={`/content/updates/${imageBasePath}/${frontmatter.featuredimage}`}
               alt={frontmatter.title}
               fill
               className="object-cover"
@@ -114,7 +114,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <header className="container mx-auto max-w-4xl px-4 py-8">
           {/* Back link */}
           <Link
-            href="/blog"
+            href="/updates"
             className="mb-6 inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-primary"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -227,7 +227,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               dateModified: frontmatter.date,
               description: frontmatter.description || post.excerpt,
               ...(frontmatter.featuredimage && {
-                image: `/content/blog/${imageBasePath}/${frontmatter.featuredimage}`,
+                image: `/content/updates/${imageBasePath}/${frontmatter.featuredimage}`,
               }),
             }),
           }}

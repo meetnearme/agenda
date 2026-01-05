@@ -125,12 +125,12 @@ collections:
                 hint: 'URL for the header Subscribe button (e.g., https://yourname.beehiiv.com/subscribe)'
                 required: false
 
-  - name: blog
+  - name: updates
     label: Updates
-    folder: content/blog
+    folder: content/updates
     create: true
     slug: index
-    media_folder: /public/content/blog/{{year}}/{{month}}/{{title}}
+    media_folder: /public/content/updates/{{year}}/{{month}}/{{title}}
     public_folder: ''
     path: '{{year}}/{{month}}/{{title}}/index'
     editor:
@@ -139,7 +139,7 @@ collections:
       - label: Template Key
         name: templatekey
         widget: hidden
-        default: blog-post
+        default: update-post
       - label: Title
         name: title
         widget: string

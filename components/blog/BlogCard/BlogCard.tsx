@@ -18,12 +18,12 @@ const BlogCard: React.FC<BlogCardVariantProps> = ({
   const { frontmatter, slug, formattedDate, excerpt, imageBasePath } = post;
   const { title, description, featuredimage } = frontmatter;
 
-  // Build image path to match blog page implementation
+  // Build image path to match updates page implementation
   const imageSrc =
     featuredimage && imageBasePath
-      ? `/content/blog/${imageBasePath}/${featuredimage}`
+      ? `/content/updates/${imageBasePath}/${featuredimage}`
       : featuredimage
-        ? `/content/blog/${featuredimage}`
+        ? `/content/updates/${featuredimage}`
         : null;
 
   const displayDescription = description || excerpt || '';

@@ -5,7 +5,7 @@ navigation:
   - title: Home
     slug: /
   - title: Updates
-    slug: /blog
+    slug: /updates
   - title: Events
     slug: /events
   - title: Template

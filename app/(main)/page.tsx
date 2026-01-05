@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Calendar, Mail, Users, Code2 } from 'lucide-react';
+import { ArrowRight, Calendar, Mail, Users } from 'lucide-react';
 import Link from 'next/link';
 import { getAllPosts, getSiteSettings } from '@/lib/markdown';
 import { BlogPostGrid } from '@/components/blog';
@@ -19,17 +19,17 @@ export default async function HomePage() {
   const newsletterButton = siteSettings?.newsletterbutton || 'Subscribe Now';
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="bg-background min-h-screen">
       {/* Hero Section */}
       <section className="relative px-4 py-20 md:py-32">
         <div className="container mx-auto max-w-6xl">
           <div className="space-y-6 text-center">
-            <h1 className="text-balance text-5xl font-bold tracking-tight md:text-7xl">
+            <h1 className="text-5xl font-bold tracking-tight text-balance md:text-7xl">
               YOUR WEEKLY GUIDE TO
               <br />
               <span className="text-primary">LOCAL EVENTS</span>
             </h1>
-            <p className="text-balance mx-auto max-w-2xl text-xl text-muted-foreground md:text-2xl">
+            <p className="text-muted-foreground mx-auto max-w-2xl text-xl text-balance md:text-2xl">
               Discover the best live music, food festivals, art shows, and
               community gatherings happening every week.
             </p>
@@ -41,7 +41,7 @@ export default async function HomePage() {
                 buttonText={newsletterButton}
                 variant="compact"
               />
-              <p className="mt-3 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-3 text-sm">
                 Join {subscriberCount} {subscriberText}
               </p>
             </div>
@@ -50,12 +50,12 @@ export default async function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="border-t border-border px-4 py-16">
+      <section className="border-border border-t px-4 py-16">
         <div className="container mx-auto max-w-6xl">
           <div className="grid gap-8 md:grid-cols-3">
             <Card className="border-border bg-card p-6">
-              <Calendar className="mb-4 h-10 w-10 text-primary" />
-              <h3 className="mb-2 text-xl font-bold text-card-foreground">
+              <Calendar className="text-primary mb-4 h-10 w-10" />
+              <h3 className="text-card-foreground mb-2 text-xl font-bold">
                 Curated Weekly
               </h3>
               <p className="text-muted-foreground">
@@ -65,8 +65,8 @@ export default async function HomePage() {
             </Card>
 
             <Card className="border-border bg-card p-6">
-              <Users className="mb-4 h-10 w-10 text-primary" />
-              <h3 className="mb-2 text-xl font-bold text-card-foreground">
+              <Users className="text-primary mb-4 h-10 w-10" />
+              <h3 className="text-card-foreground mb-2 text-xl font-bold">
                 Hyper Local
               </h3>
               <p className="text-muted-foreground">
@@ -76,8 +76,8 @@ export default async function HomePage() {
             </Card>
 
             <Card className="border-border bg-card p-6">
-              <Mail className="mb-4 h-10 w-10 text-primary" />
-              <h3 className="mb-2 text-xl font-bold text-card-foreground">
+              <Mail className="text-primary mb-4 h-10 w-10" />
+              <h3 className="text-card-foreground mb-2 text-xl font-bold">
                 Zero Spam
               </h3>
               <p className="text-muted-foreground">
@@ -93,13 +93,14 @@ export default async function HomePage() {
       <section className="px-4 py-16">
         <div className="container mx-auto max-w-6xl">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="text-foreground text-3xl font-bold md:text-4xl">
               LATEST UPDATES
             </h2>
-            <Link href="/blog">
+
+            <Link href="/updates">
               <Button
                 variant="outline"
-                className="border-border bg-transparent text-foreground"
+                className="border-border text-foreground bg-transparent"
               >
                 View All
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -114,21 +115,21 @@ export default async function HomePage() {
               {[1, 2, 3].map((i) => (
                 <Card
                   key={i}
-                  className="group cursor-pointer overflow-hidden border-border bg-card transition-colors hover:border-primary/50"
+                  className="group border-border bg-card hover:border-primary/50 cursor-pointer overflow-hidden transition-colors"
                 >
-                  <div className="relative aspect-video overflow-hidden bg-muted">
+                  <div className="bg-muted relative aspect-video overflow-hidden">
                     <div className="flex h-full w-full items-center justify-center">
                       <span className="text-muted-foreground">No image</span>
                     </div>
                   </div>
                   <div className="p-6">
-                    <div className="mb-2 text-sm font-semibold text-primary">
+                    <div className="text-primary mb-2 text-sm font-semibold">
                       Sample Date
                     </div>
-                    <h3 className="mb-2 text-xl font-bold text-card-foreground transition-colors group-hover:text-primary">
+                    <h3 className="text-card-foreground group-hover:text-primary mb-2 text-xl font-bold transition-colors">
                       Sample Update Title
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       This is a placeholder update. Add updates via the CMS.
                     </p>
                   </div>
@@ -139,45 +140,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Template CTA Section */}
-      <section className="border-y border-primary/20 bg-primary/5 px-4 py-16">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col items-center gap-8 md:flex-row">
-            <div className="flex-1 space-y-4">
-              <div className="inline-block rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-primary">
-                Open Source Template
-              </div>
-              <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-                CREATE YOUR OWN HYPER LOCAL EVENTS NEWSLETTER
-              </h2>
-              <p className="text-balance text-lg text-muted-foreground">
-                This entire site is free and open source. Fork it to create your
-                own community newsletter in minutes.
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <Link href="/template">
-                <Button
-                  size="lg"
-                  className="h-14 bg-primary px-10 font-semibold text-primary-foreground hover:bg-primary/90"
-                >
-                  <Code2 className="mr-2 h-5 w-5" />
-                  Get Started Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="border-t border-border px-4 py-20">
+      <section className="border-border border-t px-4 py-20">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-balance mb-6 text-4xl font-bold text-foreground md:text-5xl">
+          <h2 className="text-foreground mb-6 text-4xl font-bold text-balance md:text-5xl">
             NEVER MISS AN EVENT AGAIN
           </h2>
-          <p className="text-balance mb-8 text-xl text-muted-foreground">
+          <p className="text-muted-foreground mb-8 text-xl text-balance">
             Get the best events delivered to your inbox every Monday
           </p>
 
@@ -193,4 +162,3 @@ export default async function HomePage() {
     </main>
   );
 }
-

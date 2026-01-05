@@ -17,7 +17,7 @@ const contentDirectory = path.join(process.cwd(), 'content');
 /**
  * Get the content directory path for a specific content type
  */
-function getContentDirectory(contentType: 'blog' | 'pages' | 'home'): string {
+function getContentDirectory(contentType: 'updates' | 'pages' | 'home'): string {
   return path.join(contentDirectory, contentType);
 }
 
@@ -51,11 +51,11 @@ function findMarkdownFiles(dir: string): string[] {
 
 /**
  * Generate a slug from a file path
- * Creates flat slugs compatible with /blog/[slug] routing
+ * Creates flat slugs compatible with /updates/[slug] routing
  */
 function generateSlugFromPath(
   filePath: string,
-  contentType: 'blog' | 'pages' | 'home'
+  contentType: 'updates' | 'pages' | 'home'
 ): string {
   const relativePath = path.relative(
     getContentDirectory(contentType),
@@ -65,14 +65,14 @@ function generateSlugFromPath(
 
   let slug: string;
 
-  if (contentType === 'blog') {
-    // For blog posts, use only the final directory name to create flat slugs
+  if (contentType === 'updates') {
+    // For update posts, use only the final directory name to create flat slugs
     // This converts paths like "2021/12/blessing-for-a-new-year" to just "blessing-for-a-new-year"
     const pathParts = dirPath
       .split(path.sep)
       .filter((part) => part !== '.' && part !== '');
     slug = pathParts.length > 0 ? pathParts[pathParts.length - 1] : '';
-    slug = `/blog/${slug}`;
+    slug = `/updates/${slug}`;
   } else if (contentType === 'pages') {
     // For pages, use the directory name as the slug
     slug = dirPath === '.' ? '' : dirPath;
@@ -179,22 +179,22 @@ async function markdownToHtml(markdown: string): Promise<string> {
 }
 
 /**
- * Get a single blog post by slug
+ * Get a single update post by slug
  */
 export async function getPostBySlug(
   slug: string
 ): Promise<BlogPostWithMetadata | null> {
   try {
-    const blogDir = getContentDirectory('blog');
-    const normalizedSlug = slug.replace(/^\/blog\//, '').replace(/\/$/, '');
-    const targetSlug = `/blog/${normalizedSlug}`;
+    const updatesDir = getContentDirectory('updates');
+    const normalizedSlug = slug.replace(/^\/updates\//, '').replace(/\/$/, '');
+    const targetSlug = `/updates/${normalizedSlug}`;
 
     // Find all markdown files and search for the one with matching slug
-    const markdownFiles = findMarkdownFiles(blogDir);
+    const markdownFiles = findMarkdownFiles(updatesDir);
 
     let matchingFilePath: string | null = null;
     for (const filePath of markdownFiles) {
-      const generatedSlug = generateSlugFromPath(filePath, 'blog');
+      const generatedSlug = generateSlugFromPath(filePath, 'updates');
       if (generatedSlug === targetSlug) {
         matchingFilePath = filePath;
         break;
@@ -224,7 +224,7 @@ export async function getPostBySlug(
     });
 
     // Get the actual directory path for images
-    const relativePath = path.relative(blogDir, matchingFilePath);
+    const relativePath = path.relative(updatesDir, matchingFilePath);
     const imageBasePath = path.dirname(relativePath);
 
     return {
@@ -244,11 +244,11 @@ export async function getPostBySlug(
 }
 
 /**
- * Get all blog posts sorted by date (newest first)
+ * Get all update posts sorted by date (newest first)
  */
 export async function getAllPosts(): Promise<BlogPostWithMetadata[]> {
-  const blogDir = getContentDirectory('blog');
-  const markdownFiles = findMarkdownFiles(blogDir);
+  const updatesDir = getContentDirectory('updates');
+  const markdownFiles = findMarkdownFiles(updatesDir);
 
   const posts = await Promise.all(
     markdownFiles.map(async (filePath) => {
@@ -258,7 +258,7 @@ export async function getAllPosts(): Promise<BlogPostWithMetadata[]> {
       });
 
       const frontmatter = data as BlogPost;
-      const slug = generateSlugFromPath(filePath, 'blog');
+      const slug = generateSlugFromPath(filePath, 'updates');
       const htmlContent = await markdownToHtml(content);
 
       // Calculate reading time
@@ -274,7 +274,7 @@ export async function getAllPosts(): Promise<BlogPostWithMetadata[]> {
       });
 
       // Get the actual directory path for images
-      const imageBasePath = path.dirname(path.relative(blogDir, filePath));
+      const imageBasePath = path.dirname(path.relative(updatesDir, filePath));
 
       return {
         frontmatter,
@@ -298,21 +298,21 @@ export async function getAllPosts(): Promise<BlogPostWithMetadata[]> {
 }
 
 /**
- * Get all blog post paths for static generation
+ * Get all update post paths for static generation
  */
 export function getPostPaths(): string[] {
-  const blogDir = getContentDirectory('blog');
-  const markdownFiles = findMarkdownFiles(blogDir);
+  const updatesDir = getContentDirectory('updates');
+  const markdownFiles = findMarkdownFiles(updatesDir);
 
   return markdownFiles.map((filePath) => {
-    const slug = generateSlugFromPath(filePath, 'blog');
-    // Remove leading /blog/ for the path segments
-    return slug.replace(/^\/blog\//, '');
+    const slug = generateSlugFromPath(filePath, 'updates');
+    // Remove leading /updates/ for the path segments
+    return slug.replace(/^\/updates\//, '');
   });
 }
 
 /**
- * Get featured blog posts
+ * Get featured update posts
  */
 export async function getFeaturedPosts(
   limit: number = 3

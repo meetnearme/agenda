@@ -4,10 +4,16 @@
   "private": true,
   "scripts": {
     "setup": "node scripts/setup.js",
+    "setup:config": "node scripts/setup.js --config",
+    "setup:remove-template": "node scripts/setup.js --remove-template-only",
     "dev": "next dev --turbopack --port 3001",
     "dev:cms": "decap-server",
     "dev:all": "pnpm run dev:cms & pnpm run dev",
     "build": "next build",
+    "build:ci": "chmod +x scripts/build.sh && ./scripts/build.sh",
+    "build:atx-agenda": "SITE_CONFIG=atx-agenda pnpm build:ci",
+    "build:marketing": "SITE_CONFIG=marketing pnpm build:ci",
+    "build:fork": "pnpm build:ci",
     "start": "next start",
     "lint": "next lint"
   },

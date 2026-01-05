@@ -1,5 +1,9 @@
 [build]
-  command = "pnpm run build"
+  # Uses SITE_CONFIG env var to determine which config to use:
+  # - SITE_CONFIG=atx-agenda  → ATX Agenda site (removes template)
+  # - SITE_CONFIG=marketing   → Marketing site (keeps template)
+  # - (not set)               → Customer fork (removes template, keeps defaults)
+  command = "pnpm build:ci"
   publish = "out"
 
 [build.environment]

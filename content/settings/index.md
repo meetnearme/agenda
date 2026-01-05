@@ -1,8 +1,8 @@
 ---
 sitename: Local Agenda
-brandcolor: "#a3e635"
+brandcolor: '#a3e635'
 tagline: Your Weekly Guide to Local Events
-description: Discover the best live music, food festivals, art shows, and
+description: A hyper-local events newsletter template built with Next.js, Tailwind CSS, and Decap CMS. Fork this project to create your own community newsletter.
   community gatherings happening every week.
 footertext: Your weekly guide to local events and community happenings.
 copyrightname: Local Agenda
@@ -12,8 +12,8 @@ sociallinks:
   - platform: Facebook
     url: https://facebook.com/yourname
 newsletterbutton: Subscribe Now
-subscribercount: 5,000+
-subscribercounttext: locals getting weekly event updates
+subscribercount: ''
+subscribercounttext: subscribers getting weekly updates
 newslettercta: Subscribe to our newsletter
 newsletter:
   mode: iframe

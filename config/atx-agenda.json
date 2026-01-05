@@ -1,0 +1,13 @@
+{
+  "orgName": "ATX Agenda",
+  "tagline": "Your Weekly Guide to Austin Events",
+  "description": "Discover the best local events in Austin every week. Subscribe to ATX Agenda for curated weekly event guides delivered to your inbox.",
+  "brandColor": "#a3e635",
+  "beehiiv": {
+    "mode": "iframe",
+    "embedCode": "",
+    "subscribeUrl": ""
+  },
+  "removeTemplate": true
+}
+

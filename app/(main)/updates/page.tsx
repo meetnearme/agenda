@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Curated lists of the best events happening around your city, published every Monday.',
 };
 
-export default async function BlogPage() {
+export default async function UpdatesPage() {
   const posts = await getAllPosts();
 
   return (
@@ -47,7 +47,7 @@ export default async function BlogPage() {
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       {hasImage ? (
                         <Image
-                          src={`/content/blog/${post.imageBasePath}/${post.frontmatter.featuredimage}`}
+                          src={`/content/updates/${post.imageBasePath}/${post.frontmatter.featuredimage}`}
                           alt={post.frontmatter.title}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"

@@ -4,19 +4,24 @@
  * Local Agenda Setup Script
  *
  * This script helps new users customize the template for their own newsletter.
- * Run with: pnpm setup
+ *
+ * Usage:
+ *   Interactive mode:  pnpm setup
+ *   Config file mode:  node scripts/setup.js --config config/atx-agenda.json
+ *   Template removal:  node scripts/setup.js --remove-template-only
  */
 
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
 const ROOT_DIR = path.join(__dirname, '..');
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const configIndex = args.indexOf('--config');
+const removeTemplateOnly = args.includes('--remove-template-only');
+const configPath = configIndex !== -1 ? args[configIndex + 1] : null;
 
 // Color presets for easy selection (hex + oklch for both CMS and CSS)
 const COLOR_PRESETS = {
@@ -98,12 +103,6 @@ function isValidHex(hex) {
   return /^#?[0-9A-Fa-f]{6}$/.test(hex);
 }
 
-function question(prompt) {
-  return new Promise((resolve) => {
-    rl.question(prompt, resolve);
-  });
-}
-
 function replaceInFile(filePath, searchValue, replaceValue) {
   if (!fs.existsSync(filePath)) {
     console.log(`  ⚠ File not found: ${filePath}`);
@@ -134,209 +133,84 @@ function deleteFile(filePath) {
   return false;
 }
 
-async function main() {
-  console.log('\n');
-  console.log(
-    '╔══════════════════════════════════════════════════════════════╗'
-  );
-  console.log(
-    '║                                                              ║'
-  );
-  console.log(
-    '║   🚀 Welcome to Local Agenda Setup                           ║'
-  );
-  console.log(
-    '║                                                              ║'
-  );
-  console.log(
-    '║   This script will customize the template for your          ║'
-  );
-  console.log(
-    '║   community newsletter.                                      ║'
-  );
-  console.log(
-    '║                                                              ║'
-  );
-  console.log(
-    '╚══════════════════════════════════════════════════════════════╝'
-  );
-  console.log('\n');
+/**
+ * Remove template page and all references to it
+ */
+function removeTemplatePage() {
+  const navPath = path.join(ROOT_DIR, 'lib/navigation.ts');
 
-  // 1. Organization Name
-  console.log('📝 STEP 1: Organization Name\n');
-  const orgName = await question(
-    '   What is your newsletter/organization name?\n   (e.g., "Austin Events", "Brooklyn Buzz")\n\n   > '
-  );
+  // Remove template page directory
+  console.log('🗑️  Removing template page...');
+  deleteDirectory(path.join(ROOT_DIR, 'app/(main)/template'));
+  deleteDirectory(path.join(ROOT_DIR, 'content/template'));
+  console.log('   ✓ Template page removed\n');
 
-  if (!orgName.trim()) {
-    console.log('\n   ❌ Organization name is required. Exiting.\n');
-    rl.close();
-    process.exit(1);
+  // Remove Template from navigation in home content
+  console.log('📄 Updating navigation...');
+  const homeContentPath = path.join(ROOT_DIR, 'content/home/index.md');
+  if (fs.existsSync(homeContentPath)) {
+    const homeContent = fs.readFileSync(homeContentPath, 'utf8');
+    const updatedHomeContent = homeContent.replace(
+      /  - title: Template\n    slug: \/template\n/g,
+      ''
+    );
+    fs.writeFileSync(homeContentPath, updatedHomeContent);
   }
 
-  // 2. Brand Color
-  console.log('\n📎 STEP 2: Brand Color\n');
-  console.log('   Choose a preset color or enter your own:\n');
-
-  Object.entries(COLOR_PRESETS).forEach(([key, value], index) => {
-    console.log(`   ${index + 1}. ${value.name} (${value.hex})`);
-  });
-  console.log(`   9. Custom hex color (e.g., #ff5500)`);
-  console.log('');
-
-  const colorChoice = await question(
-    '   Enter number (1-9) or press Enter for lime: '
-  );
-
-  let primaryColorHex = COLOR_PRESETS.lime.hex;
-  let primaryColorOklch = COLOR_PRESETS.lime.oklch;
-  const colorKeys = Object.keys(COLOR_PRESETS);
-
-  if (colorChoice.trim()) {
-    const choiceNum = parseInt(colorChoice);
-    if (choiceNum >= 1 && choiceNum <= 8) {
-      const preset = COLOR_PRESETS[colorKeys[choiceNum - 1]];
-      primaryColorHex = preset.hex;
-      primaryColorOklch = preset.oklch;
-      console.log(`   ✓ Selected: ${preset.name} (${preset.hex})`);
-    } else if (choiceNum === 9) {
-      const customHex = await question(
-        '\n   Enter hex color (e.g., "#ff5500" or "ff5500"):\n   > '
-      );
-      if (customHex.trim() && isValidHex(customHex.trim())) {
-        primaryColorHex = customHex.trim().startsWith('#')
-          ? customHex.trim()
-          : `#${customHex.trim()}`;
-        primaryColorOklch = hexToOklch(primaryColorHex);
-        console.log(`   ✓ Using custom color: ${primaryColorHex}`);
-        console.log(`   ✓ Converted to OKLCH: ${primaryColorOklch}`);
-      } else {
-        console.log('   ⚠ Invalid hex color. Using default lime green.');
-      }
-    }
-  } else {
-    console.log('   ✓ Using default: Lime Green');
+  // Remove from navigation.ts
+  if (fs.existsSync(navPath)) {
+    const navContent = fs.readFileSync(navPath, 'utf8');
+    const updatedNavContent = navContent.replace(
+      /  {\n    title: 'Template',\n    slug: '\/template',\n  },\n/g,
+      ''
+    );
+    fs.writeFileSync(navPath, updatedNavContent);
   }
+  console.log('   ✓ Navigation cleaned up\n');
 
-  // 3. Tagline
-  console.log('\n✍️  STEP 3: Tagline\n');
-  const tagline = await question(
-    '   Enter a short tagline for your newsletter:\n   (e.g., "Your Weekly Guide to Austin Events")\n\n   > '
-  );
-
-  // 3b. Site Description (for SEO)
-  console.log('\n📝 STEP 3b: Site Description (SEO)\n');
-  console.log('   This appears in search results and social media shares.\n');
-  const siteDescription = await question(
-    '   Enter a longer description for your newsletter:\n   (e.g., "Discover the best local events in Austin every week. Subscribe for curated weekly event guides.")\n\n   > '
-  );
-
-  // 4. Beehiiv Newsletter Integration
-  console.log('\n📧 STEP 4: Newsletter Integration (Beehiiv)\n');
-  console.log(
-    '   Beehiiv is a newsletter platform that powers your subscriber signups.'
-  );
-  console.log(
-    '   You can set this up now or configure it later in Site Settings.\n'
-  );
-  console.log('   Options:');
-  console.log('   1. Skip for now (configure later in CMS)');
-  console.log('   2. Iframe Embed (works on all Beehiiv tiers)');
-  console.log('   3. Native Form (requires Beehiiv API access)\n');
-
-  const beehiivChoice = await question(
-    '   Enter choice (1-3) or press Enter to skip: '
-  );
-
-  let beehiivMode = 'iframe';
-  let beehiivEmbedCode = '';
-  let beehiivPublicationId = '';
-  let beehiivApiKey = '';
-
-  if (beehiivChoice.trim() === '2') {
-    console.log('\n   To get your embed code:');
-    console.log('   1. Go to Beehiiv → Audience → Subscribe Forms');
-    console.log('   2. Create or select a form');
-    console.log('   3. Click "Get Embed Code" and copy the iframe code\n');
-
-    const embedCode = await question(
-      '   Paste your Beehiiv embed code (or press Enter to skip):\n   > '
+  // Remove Template CTA from homepage
+  console.log('📄 Removing template CTA from homepage...');
+  const homepagePath = path.join(ROOT_DIR, 'app/(main)/page.tsx');
+  if (fs.existsSync(homepagePath)) {
+    let homepageContent = fs.readFileSync(homepagePath, 'utf8');
+    // Remove Code2 import
+    homepageContent = homepageContent.replace(/, Code2/g, '');
+    // Remove the Template CTA section
+    homepageContent = homepageContent.replace(
+      /\s*{\/\* Template CTA Section \*\/}[\s\S]*?<\/section>/,
+      ''
     );
-    if (embedCode.trim()) {
-      beehiivEmbedCode = embedCode.trim();
-      console.log('   ✓ Embed code saved');
-    } else {
-      console.log('   ⚠ Skipped - you can add this later in Site Settings');
-    }
-  } else if (beehiivChoice.trim() === '3') {
-    beehiivMode = 'native';
-    console.log('\n   To get your API credentials:');
-    console.log('   1. Go to Beehiiv → Settings → API');
-    console.log('   2. Copy your Publication ID');
-    console.log('   3. Create a new API Key\n');
-
-    const pubId = await question(
-      '   Enter your Publication ID (or press Enter to skip):\n   > '
-    );
-    if (pubId.trim()) {
-      beehiivPublicationId = pubId.trim();
-      console.log('   ✓ Publication ID saved');
-    }
-
-    const apiKey = await question(
-      '\n   Enter your API Key (or press Enter to skip):\n   > '
-    );
-    if (apiKey.trim()) {
-      beehiivApiKey = apiKey.trim();
-      console.log('   ✓ API Key saved');
-    }
-
-    if (!pubId.trim() || !apiKey.trim()) {
-      console.log(
-        '   ⚠ Incomplete - you can add credentials later in Site Settings'
-      );
-    }
-  } else {
-    console.log(
-      '   ✓ Skipped - you can configure Beehiiv later in Site Settings'
-    );
+    fs.writeFileSync(homepagePath, homepageContent);
   }
+  console.log('   ✓ Homepage CTA removed\n');
 
-  // Ask for Subscribe Page URL (used by header button)
-  console.log('\n   📎 Subscribe Page URL');
-  console.log('   This URL is used by the "Subscribe" button in the header.');
-  console.log('   Format: https://yourname.beehiiv.com/subscribe\n');
-
-  let beehiivSubscribeUrl = '';
-  const subscribeUrlInput = await question(
-    '   Enter your Beehiiv subscribe page URL (or press Enter to skip):\n   > '
-  );
-  if (subscribeUrlInput.trim()) {
-    beehiivSubscribeUrl = subscribeUrlInput.trim();
-    console.log('   ✓ Subscribe URL saved');
-  } else {
-    console.log('   ⚠ Skipped - button will scroll to signup form instead');
-  }
-
-  // 5. Confirm cleanup
-  console.log('\n🧹 STEP 5: Cleanup\n');
-  console.log('   The following will be removed:');
-  console.log('   • Template page (/template)');
-  console.log('   • Sample update post');
-  console.log('   • This setup script\n');
-
-  const confirmCleanup = await question('   Proceed with cleanup? (Y/n): ');
-
-  if (confirmCleanup.toLowerCase() === 'n') {
-    console.log(
-      '   ⚠ Skipping cleanup. You can delete these files manually later.\n'
+  // Update CMS config to remove template collection
+  console.log('📄 Updating CMS config...');
+  const cmsConfigPath = path.join(ROOT_DIR, 'public/admin/config.yml');
+  if (fs.existsSync(cmsConfigPath)) {
+    let cmsContent = fs.readFileSync(cmsConfigPath, 'utf8');
+    // Remove template collection
+    cmsContent = cmsContent.replace(
+      /  - name: template[\s\S]*?(?=  - name: home)/,
+      ''
     );
+    fs.writeFileSync(cmsConfigPath, cmsContent);
   }
+  console.log('   ✓ CMS config updated\n');
+}
 
-  const doCleanup = confirmCleanup.toLowerCase() !== 'n';
+/**
+ * Apply configuration values (from config file or interactive input)
+ */
+function applyConfiguration(config) {
+  const { orgName, tagline, description, brandColor, beehiiv, removeTemplate } =
+    config;
 
-  // Apply changes
-  console.log('\n');
+  const primaryColorHex = brandColor || COLOR_PRESETS.lime.hex;
+  const primaryColorOklch = isValidHex(primaryColorHex)
+    ? hexToOklch(primaryColorHex)
+    : COLOR_PRESETS.lime.oklch;
+
   console.log(
     '═══════════════════════════════════════════════════════════════'
   );
@@ -348,17 +222,28 @@ async function main() {
   // Update Site Settings (content/settings/index.md)
   console.log('📄 Updating site settings...');
   const settingsPath = path.join(ROOT_DIR, 'content/settings/index.md');
-  replaceInFile(settingsPath, /sitename: .*/g, `sitename: ${orgName.trim()}`);
-  replaceInFile(
-    settingsPath,
-    /tagline: .*/g,
-    `tagline: ${tagline.trim() || 'Your Weekly Guide to Local Events'}`
-  );
-  replaceInFile(
-    settingsPath,
-    /copyrightname: .*/g,
-    `copyrightname: ${orgName.trim()}`
-  );
+
+  if (orgName) {
+    replaceInFile(settingsPath, /sitename: .*/g, `sitename: ${orgName}`);
+    replaceInFile(
+      settingsPath,
+      /copyrightname: .*/g,
+      `copyrightname: ${orgName}`
+    );
+  }
+
+  if (tagline) {
+    replaceInFile(settingsPath, /tagline: .*/g, `tagline: ${tagline}`);
+  }
+
+  if (description) {
+    replaceInFile(
+      settingsPath,
+      /description: .*/g,
+      `description: ${description}`
+    );
+  }
+
   replaceInFile(settingsPath, /subscribercount: .*/g, `subscribercount: ''`);
   replaceInFile(
     settingsPath,
@@ -370,12 +255,12 @@ async function main() {
   // Update Home Content (content/home/index.md)
   console.log('📄 Updating home content...');
   const homePath = path.join(ROOT_DIR, 'content/home/index.md');
-  replaceInFile(homePath, /title: Local Agenda/g, `title: ${orgName.trim()}`);
-  replaceInFile(
-    homePath,
-    /tagline: .*/g,
-    `tagline: ${tagline.trim() || 'Your Weekly Guide to Local Events'}`
-  );
+  if (orgName) {
+    replaceInFile(homePath, /title: Local Agenda/g, `title: ${orgName}`);
+  }
+  if (tagline) {
+    replaceInFile(homePath, /tagline: .*/g, `tagline: ${tagline}`);
+  }
   replaceInFile(
     homePath,
     /footerbiotext: .*/g,
@@ -438,24 +323,26 @@ async function main() {
 
   // Update Beehiiv settings
   if (
-    beehiivEmbedCode ||
-    beehiivPublicationId ||
-    beehiivApiKey ||
-    beehiivSubscribeUrl
+    beehiiv &&
+    (beehiiv.embedCode ||
+      beehiiv.publicationId ||
+      beehiiv.apiKey ||
+      beehiiv.subscribeUrl)
   ) {
     console.log('📧 Saving Beehiiv settings...');
     let currentSettings = fs.readFileSync(settingsPath, 'utf8');
 
     // Update newsletter mode
-    currentSettings = currentSettings.replace(
-      /newsletter:\s*\n\s*mode: .*/,
-      `newsletter:\n  mode: ${beehiivMode}`
-    );
+    if (beehiiv.mode) {
+      currentSettings = currentSettings.replace(
+        /newsletter:\s*\n\s*mode: .*/,
+        `newsletter:\n  mode: ${beehiiv.mode}`
+      );
+    }
 
     // Update embed code
-    if (beehiivEmbedCode) {
-      // Escape single quotes in embed code for YAML
-      const escapedEmbedCode = beehiivEmbedCode.replace(/'/g, "''");
+    if (beehiiv.embedCode) {
+      const escapedEmbedCode = beehiiv.embedCode.replace(/'/g, "''");
       currentSettings = currentSettings.replace(
         /embedCode: .*/,
         `embedCode: '${escapedEmbedCode}'`
@@ -463,26 +350,26 @@ async function main() {
     }
 
     // Update publication ID
-    if (beehiivPublicationId) {
+    if (beehiiv.publicationId) {
       currentSettings = currentSettings.replace(
         /publicationId: .*/,
-        `publicationId: '${beehiivPublicationId}'`
+        `publicationId: '${beehiiv.publicationId}'`
       );
     }
 
     // Update API key
-    if (beehiivApiKey) {
+    if (beehiiv.apiKey) {
       currentSettings = currentSettings.replace(
         /apiKey: .*/,
-        `apiKey: '${beehiivApiKey}'`
+        `apiKey: '${beehiiv.apiKey}'`
       );
     }
 
     // Update subscribe URL
-    if (beehiivSubscribeUrl) {
+    if (beehiiv.subscribeUrl) {
       currentSettings = currentSettings.replace(
         /subscribeUrl: .*/,
-        `subscribeUrl: '${beehiivSubscribeUrl}'`
+        `subscribeUrl: '${beehiiv.subscribeUrl}'`
       );
     }
 
@@ -490,135 +377,342 @@ async function main() {
     console.log('   ✓ Beehiiv settings saved\n');
   }
 
-  // Update layout metadata
-  console.log('📄 Updating page metadata...');
-  const layoutPath = path.join(ROOT_DIR, 'app/layout.tsx');
-  replaceInFile(
-    layoutPath,
-    /title: 'Local Agenda \| Your Weekly Events Newsletter'/g,
-    `title: '${orgName.trim()} | Your Weekly Events Newsletter'`
-  );
-  console.log('   ✓ Metadata updated\n');
-
   // Update navigation lib
   console.log('📄 Updating navigation defaults...');
   const navPath = path.join(ROOT_DIR, 'lib/navigation.ts');
-  replaceInFile(
-    navPath,
-    /title: 'Local Agenda'/g,
-    `title: '${orgName.trim()}'`
-  );
-  replaceInFile(
-    navPath,
-    /author: 'Local Agenda Team'/g,
-    `author: '${orgName.trim()} Team'`
-  );
+  if (orgName) {
+    replaceInFile(navPath, /title: 'Local Agenda'/g, `title: '${orgName}'`);
+    replaceInFile(
+      navPath,
+      /author: 'Local Agenda Team'/g,
+      `author: '${orgName} Team'`
+    );
+  }
   console.log('   ✓ Navigation updated\n');
 
-  if (doCleanup) {
-    // Remove template page
-    console.log('🗑️  Removing template page...');
-    deleteDirectory(path.join(ROOT_DIR, 'app/(main)/template'));
-    deleteDirectory(path.join(ROOT_DIR, 'content/template'));
-    console.log('   ✓ Template page removed\n');
-
-    // Remove sample update post
-    console.log('🗑️  Removing sample update post...');
-    deleteDirectory(path.join(ROOT_DIR, 'content/blog/2026'));
-    console.log('   ✓ Sample update post removed\n');
-
-    // Remove Template from navigation
-    console.log('📄 Updating navigation...');
-    const homeContentPath = path.join(ROOT_DIR, 'content/home/index.md');
-    const homeContent = fs.readFileSync(homeContentPath, 'utf8');
-    const updatedHomeContent = homeContent.replace(
-      /  - title: Template\n    slug: \/template\n/g,
-      ''
-    );
-    fs.writeFileSync(homeContentPath, updatedHomeContent);
-
-    // Remove from navigation.ts
-    const navContent = fs.readFileSync(navPath, 'utf8');
-    const updatedNavContent = navContent.replace(
-      /  {\n    title: 'Template',\n    slug: '\/template',\n  },\n/g,
-      ''
-    );
-    fs.writeFileSync(navPath, updatedNavContent);
-    console.log('   ✓ Navigation cleaned up\n');
-
-    // Remove Template CTA from homepage
-    console.log('📄 Removing template CTA from homepage...');
-    const homepagePath = path.join(ROOT_DIR, 'app/(main)/page.tsx');
-    if (fs.existsSync(homepagePath)) {
-      let homepageContent = fs.readFileSync(homepagePath, 'utf8');
-      // Remove Code2 import
-      homepageContent = homepageContent.replace(/, Code2/g, '');
-      // Remove the Template CTA section
-      homepageContent = homepageContent.replace(
-        /\s*{\/\* Template CTA Section \*\/}[\s\S]*?<\/section>/,
-        ''
-      );
-      fs.writeFileSync(homepagePath, homepageContent);
-    }
-    console.log('   ✓ Homepage CTA removed\n');
-
-    // Update CMS config to remove template collection
-    console.log('📄 Updating CMS config...');
-    const cmsConfigPath = path.join(ROOT_DIR, 'public/admin/config.yml');
-    if (fs.existsSync(cmsConfigPath)) {
-      let cmsContent = fs.readFileSync(cmsConfigPath, 'utf8');
-      // Remove template collection (this is a bit tricky with YAML)
-      cmsContent = cmsContent.replace(
-        /  - name: template[\s\S]*?(?=  - name: home)/,
-        ''
-      );
-      fs.writeFileSync(cmsConfigPath, cmsContent);
-    }
-    console.log('   ✓ CMS config updated\n');
-
-    // Self-destruct: remove setup script and scripts directory
-    console.log('🗑️  Removing setup script...');
-    // We'll mark for deletion but can't delete while running
-    const packageJsonPath = path.join(ROOT_DIR, 'package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    delete packageJson.scripts.setup;
-    fs.writeFileSync(
-      packageJsonPath,
-      JSON.stringify(packageJson, null, 2) + '\n'
-    );
-    console.log('   ✓ Setup script will be removed\n');
+  // Remove template if requested
+  if (removeTemplate) {
+    removeTemplatePage();
   }
 
-  // Success message
   console.log(
     '═══════════════════════════════════════════════════════════════'
   );
   console.log('');
   console.log('   ✅ Setup complete!');
   console.log('');
-  console.log(`   Your newsletter "${orgName.trim()}" is ready to go.`);
+  if (orgName) {
+    console.log(`   Your newsletter "${orgName}" is ready to go.`);
+  }
   console.log('');
+  console.log(
+    '═══════════════════════════════════════════════════════════════\n'
+  );
+}
+
+/**
+ * Run setup in non-interactive mode with config file
+ */
+function runWithConfig(configFilePath) {
+  console.log('\n');
+  console.log(
+    '╔══════════════════════════════════════════════════════════════╗'
+  );
+  console.log(
+    '║   🚀 Local Agenda Setup (Non-Interactive Mode)               ║'
+  );
+  console.log(
+    '╚══════════════════════════════════════════════════════════════╝'
+  );
+  console.log('\n');
+
+  const fullPath = path.resolve(ROOT_DIR, configFilePath);
+  console.log(`📄 Loading config from: ${fullPath}\n`);
+
+  if (!fs.existsSync(fullPath)) {
+    console.error(`❌ Config file not found: ${fullPath}`);
+    process.exit(1);
+  }
+
+  const config = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+  console.log(`   Organization: ${config.orgName || '(default)'}`);
+  console.log(`   Tagline: ${config.tagline || '(default)'}`);
+  console.log(`   Brand Color: ${config.brandColor || '(default)'}`);
+  console.log(`   Remove Template: ${config.removeTemplate ? 'Yes' : 'No'}`);
+  console.log('');
+
+  applyConfiguration(config);
+}
+
+/**
+ * Run setup to only remove template (for customer forks)
+ */
+function runRemoveTemplateOnly() {
+  console.log('\n');
+  console.log(
+    '╔══════════════════════════════════════════════════════════════╗'
+  );
+  console.log(
+    '║   🚀 Local Agenda Setup (Remove Template Only)               ║'
+  );
+  console.log(
+    '╚══════════════════════════════════════════════════════════════╝'
+  );
+  console.log('\n');
+
+  console.log('   This will remove the template page,');
+  console.log('   keeping all other defaults for CMS configuration.\n');
+
+  removeTemplatePage();
+
+  console.log(
+    '═══════════════════════════════════════════════════════════════'
+  );
+  console.log('');
+  console.log('   ✅ Template removal complete!');
+  console.log('');
+  console.log('   Configure your site via the CMS at /admin');
+  console.log('');
+  console.log(
+    '═══════════════════════════════════════════════════════════════\n'
+  );
+}
+
+/**
+ * Run setup in interactive mode
+ */
+async function runInteractive() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  function question(prompt) {
+    return new Promise((resolve) => {
+      rl.question(prompt, resolve);
+    });
+  }
+
+  console.log('\n');
+  console.log(
+    '╔══════════════════════════════════════════════════════════════╗'
+  );
+  console.log(
+    '║                                                              ║'
+  );
+  console.log(
+    '║   🚀 Welcome to Local Agenda Setup                           ║'
+  );
+  console.log(
+    '║                                                              ║'
+  );
+  console.log(
+    '║   This script will customize the template for your          ║'
+  );
+  console.log(
+    '║   community newsletter.                                      ║'
+  );
+  console.log(
+    '║                                                              ║'
+  );
+  console.log(
+    '╚══════════════════════════════════════════════════════════════╝'
+  );
+  console.log('\n');
+
+  // 1. Organization Name
+  console.log('📝 STEP 1: Organization Name\n');
+  const orgName = await question(
+    '   What is your newsletter/organization name?\n   (e.g., "Austin Events", "Brooklyn Buzz")\n\n   > '
+  );
+
+  if (!orgName.trim()) {
+    console.log('\n   ❌ Organization name is required. Exiting.\n');
+    rl.close();
+    process.exit(1);
+  }
+
+  // 2. Brand Color
+  console.log('\n📎 STEP 2: Brand Color\n');
+  console.log('   Choose a preset color or enter your own:\n');
+
+  Object.entries(COLOR_PRESETS).forEach(([key, value], index) => {
+    console.log(`   ${index + 1}. ${value.name} (${value.hex})`);
+  });
+  console.log(`   9. Custom hex color (e.g., #ff5500)`);
+  console.log('');
+
+  const colorChoice = await question(
+    '   Enter number (1-9) or press Enter for lime: '
+  );
+
+  let primaryColorHex = COLOR_PRESETS.lime.hex;
+  const colorKeys = Object.keys(COLOR_PRESETS);
+
+  if (colorChoice.trim()) {
+    const choiceNum = parseInt(colorChoice);
+    if (choiceNum >= 1 && choiceNum <= 8) {
+      const preset = COLOR_PRESETS[colorKeys[choiceNum - 1]];
+      primaryColorHex = preset.hex;
+      console.log(`   ✓ Selected: ${preset.name} (${preset.hex})`);
+    } else if (choiceNum === 9) {
+      const customHex = await question(
+        '\n   Enter hex color (e.g., "#ff5500" or "ff5500"):\n   > '
+      );
+      if (customHex.trim() && isValidHex(customHex.trim())) {
+        primaryColorHex = customHex.trim().startsWith('#')
+          ? customHex.trim()
+          : `#${customHex.trim()}`;
+        console.log(`   ✓ Using custom color: ${primaryColorHex}`);
+      } else {
+        console.log('   ⚠ Invalid hex color. Using default lime green.');
+      }
+    }
+  } else {
+    console.log('   ✓ Using default: Lime Green');
+  }
+
+  // 3. Tagline
+  console.log('\n✍️  STEP 3: Tagline\n');
+  const tagline = await question(
+    '   Enter a short tagline for your newsletter:\n   (e.g., "Your Weekly Guide to Austin Events")\n\n   > '
+  );
+
+  // 3b. Site Description (for SEO)
+  console.log('\n📝 STEP 3b: Site Description (SEO)\n');
+  console.log('   This appears in search results and social media shares.\n');
+  const siteDescription = await question(
+    '   Enter a longer description for your newsletter:\n   (e.g., "Discover the best local events in Austin every week. Subscribe for curated weekly event guides.")\n\n   > '
+  );
+
+  // 4. Beehiiv Newsletter Integration
+  console.log('\n📧 STEP 4: Newsletter Integration (Beehiiv)\n');
+  console.log(
+    '   Beehiiv is a newsletter platform that powers your subscriber signups.'
+  );
+  console.log(
+    '   You can set this up now or configure it later in Site Settings.\n'
+  );
+  console.log('   Options:');
+  console.log('   1. Skip for now (configure later in CMS)');
+  console.log('   2. Iframe Embed (works on all Beehiiv tiers)');
+  console.log('   3. Native Form (requires Beehiiv API access)\n');
+
+  const beehiivChoice = await question(
+    '   Enter choice (1-3) or press Enter to skip: '
+  );
+
+  let beehiivMode = 'iframe';
+  let beehiivEmbedCode = '';
+  let beehiivPublicationId = '';
+  let beehiivApiKey = '';
+  let beehiivSubscribeUrl = '';
+
+  if (beehiivChoice.trim() === '2') {
+    console.log('\n   To get your embed code:');
+    console.log('   1. Go to Beehiiv → Audience → Subscribe Forms');
+    console.log('   2. Create or select a form');
+    console.log('   3. Click "Get Embed Code" and copy the iframe code\n');
+
+    const embedCode = await question(
+      '   Paste your Beehiiv embed code (or press Enter to skip):\n   > '
+    );
+    if (embedCode.trim()) {
+      beehiivEmbedCode = embedCode.trim();
+      console.log('   ✓ Embed code saved');
+    } else {
+      console.log('   ⚠ Skipped - you can add this later in Site Settings');
+    }
+  } else if (beehiivChoice.trim() === '3') {
+    beehiivMode = 'native';
+    console.log('\n   To get your API credentials:');
+    console.log('   1. Go to Beehiiv → Settings → API');
+    console.log('   2. Copy your Publication ID');
+    console.log('   3. Create a new API Key\n');
+
+    const pubId = await question(
+      '   Enter your Publication ID (or press Enter to skip):\n   > '
+    );
+    if (pubId.trim()) {
+      beehiivPublicationId = pubId.trim();
+      console.log('   ✓ Publication ID saved');
+    }
+
+    const apiKey = await question(
+      '\n   Enter your API Key (or press Enter to skip):\n   > '
+    );
+    if (apiKey.trim()) {
+      beehiivApiKey = apiKey.trim();
+      console.log('   ✓ API Key saved');
+    }
+
+    if (!pubId.trim() || !apiKey.trim()) {
+      console.log(
+        '   ⚠ Incomplete - you can add credentials later in Site Settings'
+      );
+    }
+  } else {
+    console.log(
+      '   ✓ Skipped - you can configure Beehiiv later in Site Settings'
+    );
+  }
+
+  // Ask for Subscribe Page URL (used by header button)
+  console.log('\n   📎 Subscribe Page URL');
+  console.log('   This URL is used by the "Subscribe" button in the header.');
+  console.log('   Format: https://yourname.beehiiv.com/subscribe\n');
+
+  const subscribeUrlInput = await question(
+    '   Enter your Beehiiv subscribe page URL (or press Enter to skip):\n   > '
+  );
+  if (subscribeUrlInput.trim()) {
+    beehiivSubscribeUrl = subscribeUrlInput.trim();
+    console.log('   ✓ Subscribe URL saved');
+  } else {
+    console.log('   ⚠ Skipped - button will scroll to signup form instead');
+  }
+
+  // 5. Confirm cleanup
+  console.log('\n🧹 STEP 5: Cleanup\n');
+  console.log('   The following will be removed:');
+  console.log('   • Template page (/template)\n');
+
+  const confirmCleanup = await question('   Proceed with cleanup? (Y/n): ');
+  const doCleanup = confirmCleanup.toLowerCase() !== 'n';
+
+  rl.close();
+
+  // Apply configuration
+  applyConfiguration({
+    orgName: orgName.trim(),
+    tagline: tagline.trim() || 'Your Weekly Guide to Local Events',
+    description: siteDescription.trim(),
+    brandColor: primaryColorHex,
+    beehiiv: {
+      mode: beehiivMode,
+      embedCode: beehiivEmbedCode,
+      publicationId: beehiivPublicationId,
+      apiKey: beehiivApiKey,
+      subscribeUrl: beehiivSubscribeUrl,
+    },
+    removeTemplate: doCleanup,
+  });
+
   console.log('   Next steps:');
   console.log('   1. Run `pnpm dev:all` to start developing');
   console.log('   2. Visit http://localhost:3001/admin to manage content');
   console.log('   3. Deploy to Netlify when ready');
   console.log('');
-
-  if (doCleanup) {
-    console.log('   📌 Remember to delete the scripts/ directory:');
-    console.log('      rm -rf scripts/');
-    console.log('');
-  }
-
-  console.log(
-    '═══════════════════════════════════════════════════════════════\n'
-  );
-
-  rl.close();
 }
 
-main().catch((error) => {
-  console.error('Error:', error);
-  rl.close();
-  process.exit(1);
-});
+// Main entry point
+if (configPath) {
+  runWithConfig(configPath);
+} else if (removeTemplateOnly) {
+  runRemoveTemplateOnly();
+} else {
+  runInteractive().catch((error) => {
+    console.error('Error:', error);
+    process.exit(1);
+  });
+}
