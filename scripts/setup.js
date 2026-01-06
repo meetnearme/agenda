@@ -278,6 +278,7 @@ function applyConfiguration(config) {
     description,
     brandColor,
     beehiiv,
+    eventsEmbed,
     removeTemplate,
     contentDir,
   } = config;
@@ -396,6 +397,34 @@ function applyConfiguration(config) {
     fs.writeFileSync(settingsPath, updatedSettings);
   }
   console.log('   ✓ Brand color saved to CMS settings\n');
+
+  // Update Events embed code
+  if (eventsEmbed) {
+    console.log('📅 Updating events embed...');
+    const eventsPath = path.join(ROOT_DIR, 'content/events/index.md');
+
+    if (fs.existsSync(eventsPath)) {
+      let eventsContent = fs.readFileSync(eventsPath, 'utf8');
+
+      // Replace the embedcode field with the new embed code
+      // The embedcode field uses YAML multiline syntax (|)
+      eventsContent = eventsContent.replace(
+        /embedcode: \|[\s\S]*?(?=\ninstructionstitle:)/,
+        `embedcode: |\n  ${eventsEmbed.split('\n').join('\n  ')}\n`
+      );
+
+      // Set showInstructions to false since we have a real embed
+      eventsContent = eventsContent.replace(
+        /showInstructions: true/,
+        'showInstructions: false'
+      );
+
+      fs.writeFileSync(eventsPath, eventsContent);
+      console.log('   ✓ Events embed updated\n');
+    } else {
+      console.log('   ⚠ Events content file not found\n');
+    }
+  }
 
   // Update Beehiiv settings
   if (
@@ -519,6 +548,7 @@ function runWithConfig(configFilePath) {
   console.log(`   Organization: ${config.orgName || '(default)'}`);
   console.log(`   Tagline: ${config.tagline || '(default)'}`);
   console.log(`   Brand Color: ${config.brandColor || '(default)'}`);
+  console.log(`   Events Embed: ${config.eventsEmbed ? 'Yes' : 'No'}`);
   console.log(`   Remove Template: ${config.removeTemplate ? 'Yes' : 'No'}`);
   console.log('');
 
