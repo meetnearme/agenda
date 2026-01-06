@@ -38,10 +38,10 @@ export default function Footer({
 
           <div className="flex items-center gap-6">
             <Link
-              href="/blog"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              href="/updates"
             >
-              Blog
+              Updates
             </Link>
             <Link
               href="/events"
