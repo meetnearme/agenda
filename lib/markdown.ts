@@ -12,15 +12,33 @@ import type {
   HomeContentWithMetadata,
 } from '../types/content.types';
 
-const contentDirectory = path.join(process.cwd(), 'content');
+/**
+ * Get the base content directory - reads env var dynamically to ensure
+ * it's available after Next.js loads .env.local
+ *
+ * Only 'updates' and 'events' are config-driven (from CONTENT_DIR env var)
+ * Other content types (home, pages, settings) always use default 'content/'
+ */
+function getBaseContentDirectory(configDriven: boolean = false): string {
+  if (configDriven) {
+    const contentDir = process.env.CONTENT_DIR || 'content';
+    console.log('[markdown.ts] Config-driven CONTENT_DIR:', contentDir);
+    return path.join(process.cwd(), contentDir);
+  }
+  return path.join(process.cwd(), 'content');
+}
 
 /**
  * Get the content directory path for a specific content type
+ * - 'updates': config-driven (uses CONTENT_DIR env var)
+ * - 'pages', 'home': always from default content/
  */
 function getContentDirectory(
   contentType: 'updates' | 'pages' | 'home'
 ): string {
-  return path.join(contentDirectory, contentType);
+  // Only updates are config-driven; pages and home use default content/
+  const isConfigDriven = contentType === 'updates';
+  return path.join(getBaseContentDirectory(isConfigDriven), contentType);
 }
 
 /**
@@ -465,7 +483,8 @@ export interface EventsContentWithMetadata {
  */
 export async function getEventsContent(): Promise<EventsContentWithMetadata | null> {
   try {
-    const eventsDir = path.join(contentDirectory, 'events');
+    // Events are config-driven (uses CONTENT_DIR env var)
+    const eventsDir = path.join(getBaseContentDirectory(true), 'events');
     const filePath = path.join(eventsDir, 'index.md');
 
     if (!fs.existsSync(filePath)) {
@@ -529,7 +548,8 @@ export interface SiteSettings {
  */
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
-    const settingsDir = path.join(contentDirectory, 'settings');
+    // Settings always come from the default content directory, not config-specific
+    const settingsDir = path.join(process.cwd(), 'content', 'settings');
     const filePath = path.join(settingsDir, 'index.md');
 
     if (!fs.existsSync(filePath)) {

@@ -45,10 +45,13 @@ execSync(`node scripts/setup.js --config config/atx-agenda.json`, {
     stdio: 'inherit'
 });
 
+// Create .env.local with the content directory
+const contentDir = config.contentDir || 'content';
+const envLocalPath = path.join(ROOT_DIR, '.env.local');
+fs.writeFileSync(envLocalPath, `CONTENT_DIR=${contentDir}\n`);
+console.log(`📝 Created .env.local with CONTENT_DIR=${contentDir}`);
+
 console.log('');
-console.log('💡 To run the dev server with the correct content directory:');
-console.log(`   CONTENT_DIR="${config.contentDir || 'content'}" pnpm dev:all`);
-console.log('');
-console.log('   Or add to your .env.local:');
-console.log(`   CONTENT_DIR=${config.contentDir || 'content'}`);
+console.log('✅ Ready! Run the dev server:');
+console.log('   pnpm dev:all');
 console.log('');
