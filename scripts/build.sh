@@ -29,10 +29,15 @@ fi
 
 echo ""
 echo "Content directory: $CONTENT_DIR"
-export CONTENT_DIR
-echo "Verifying CONTENT_DIR is exported: $CONTENT_DIR"
+
+# Write to .env.local for Next.js to pick up during static generation
+echo "CONTENT_DIR=$CONTENT_DIR" > .env.local
+echo "Created .env.local with CONTENT_DIR=$CONTENT_DIR"
+cat .env.local
+
+export CONTENT_DIR="$CONTENT_DIR"
 echo "Running Next.js build with CONTENT_DIR=$CONTENT_DIR"
-pnpm build
+CONTENT_DIR="$CONTENT_DIR" pnpm build
 
 echo ""
 echo "Build complete!"
