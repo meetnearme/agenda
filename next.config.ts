@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Pass CONTENT_DIR env var to the build for config-driven content directories
+  env: {
+    CONTENT_DIR: process.env.CONTENT_DIR || 'content',
+  },
+
   // Static export only for production builds (Netlify)
   // Development mode needs dynamic routing for admin rewrites
   output: process.env.NODE_ENV === 'production' ? 'export' : undefined,

@@ -29,8 +29,9 @@ fi
 
 echo ""
 echo "Content directory: $CONTENT_DIR"
+export CONTENT_DIR
 echo "Running Next.js build..."
-CONTENT_DIR="$CONTENT_DIR" pnpm build
+pnpm build
 
 echo ""
 echo "Build complete!"
