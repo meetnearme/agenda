@@ -286,6 +286,7 @@ function applyConfiguration(config, configFilePath = null) {
         tagline,
         description,
         brandColor,
+        heroText,
         beehiiv,
         removeTemplate,
         contentDir
