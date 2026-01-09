@@ -1,0 +1,15 @@
+{
+  "orgName": "Local Agenda",
+  "tagline": "Your Weekly Guide to Local Events",
+  "description": "Discover the best local events in your area every week. Subscribe for curated weekly event guides delivered to your inbox.",
+  "brandColor": "#a3e635",
+  "beehiiv": {
+    "mode": "iframe",
+    "embedCode": "",
+    "subscribeUrl": ""
+  },
+  "eventsEmbed": "",
+  "removeTemplate": false,
+  "contentDir": "content"
+}
+
