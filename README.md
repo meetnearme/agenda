@@ -98,9 +98,10 @@ To set up for local development using the demo ATX Agenda config (with the event
 
 ```bash
 pnpm setup:dev
+pnpm dev:all
 ```
 
-This runs `setup.js` with `config/atx-agenda.json` but overrides the `eventsEmbed` to use `http://localhost:8001` instead of production.
+This runs `setup.js` with `config/atx-agenda.json` but overrides the `eventsEmbed` to use `http://localhost:8001` instead of production and runs the dev server alongside a Decap CMS local proxy.
 
 ## CMS Setup (Netlify Identity)
 
@@ -222,3 +223,4 @@ MIT License - feel free to use this template for your community newsletter!
 ---
 
 Built with ❤️ for local communities everywhere.
+
