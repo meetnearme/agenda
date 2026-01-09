@@ -92,6 +92,16 @@ pnpm build:marketing
 pnpm build:fork
 ```
 
+### Local Development with ATX Agenda Config
+
+To set up for local development using the demo ATX Agenda config (with the events embed pointing to localhost:8001):
+
+```bash
+pnpm setup:dev
+```
+
+This runs `setup.js` with `config/atx-agenda.json` but overrides the `eventsEmbed` to use `http://localhost:8001` instead of production.
+
 ## CMS Setup (Netlify Identity)
 
 After deploying to Netlify:
@@ -150,11 +160,11 @@ For deeper customization, edit the CSS variables in `app/globals.css`:
 
 ```css
 :root {
-  --primary: oklch(0.87 0.18 127); /* Lime green accent */
-  --background: oklch(0.12 0 0); /* Dark background */
-  --foreground: oklch(0.98 0 0); /* Text color */
-  --card: oklch(0.16 0 0); /* Card backgrounds */
-  /* ... other colors */
+    --primary: oklch(0.87 0.18 127); /* Lime green accent */
+    --background: oklch(0.12 0 0); /* Dark background */
+    --foreground: oklch(0.98 0 0); /* Text color */
+    --card: oklch(0.16 0 0); /* Card backgrounds */
+    /* ... other colors */
 }
 ```
 
@@ -163,9 +173,9 @@ For deeper customization, edit the CSS variables in `app/globals.css`:
 - Change `--primary` to match your brand color
 - The template uses [OKLCH color space](https://oklch.com/) for better color consistency
 - Try these accent colors:
-  - Blue: `oklch(0.7 0.15 250)`
-  - Orange: `oklch(0.75 0.18 50)`
-  - Purple: `oklch(0.65 0.2 300)`
+    - Blue: `oklch(0.7 0.15 250)`
+    - Orange: `oklch(0.75 0.18 50)`
+    - Purple: `oklch(0.65 0.2 300)`
 
 ### Navigation
 
@@ -190,15 +200,16 @@ The events page supports embedding external event widgets (like Meet Near Me). C
 
 ## Scripts
 
-| Command        | Description                                    |
-| -------------- | ---------------------------------------------- |
-| `pnpm setup`   | **Run first** - Customize for your newsletter  |
-| `pnpm dev:all` | **Recommended** - Start dev server + CMS proxy |
-| `pnpm dev`     | Start Next.js development server only          |
-| `pnpm dev:cms` | Start Decap CMS local proxy only               |
-| `pnpm build`   | Build for production (static export)           |
-| `pnpm start`   | Start production server                        |
-| `pnpm lint`    | Run ESLint                                     |
+| Command          | Description                                    |
+| ---------------- | ---------------------------------------------- |
+| `pnpm setup`     | **Run first** - Customize for your newsletter  |
+| `pnpm setup:dev` | Setup with ATX Agenda config (localhost embed) |
+| `pnpm dev:all`   | **Recommended** - Start dev server + CMS proxy |
+| `pnpm dev`       | Start Next.js development server only          |
+| `pnpm dev:cms`   | Start Decap CMS local proxy only               |
+| `pnpm build`     | Build for production (static export)           |
+| `pnpm start`     | Start production server                        |
+| `pnpm lint`      | Run ESLint                                     |
 
 ## Contributing
 
