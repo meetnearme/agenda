@@ -4,10 +4,12 @@
  * Local Development Setup Script
  *
  * This script sets up the project for local development by using the
- * atx-agenda.json config but replacing the events embed with a localhost version.
+ * atx-agenda.json config. It configures the CMS to point to ATX Agenda
+ * content directories.
  *
  * Usage:
  *   node scripts/setup-dev.js
+ *   pnpm setup:dev
  */
 
 const { execSync } = require('child_process');
@@ -16,11 +18,6 @@ const path = require('path');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const CONFIG_PATH = path.join(ROOT_DIR, 'config/atx-agenda.json');
-const TEMP_CONFIG_PATH = path.join(ROOT_DIR, 'config/.atx-agenda-dev.json');
-
-// Local development events embed
-const LOCAL_EVENTS_EMBED = `<div id="mnm-embed-container"></div>
-<script src="http://localhost:8001/static/assets/embed.js" data-subdomain="atxagenda" data-user-id="350373621882956150"></script>`;
 
 console.log('\n');
 console.log('╔══════════════════════════════════════════════════════════════╗');
@@ -30,41 +27,28 @@ console.log(
 console.log('╚══════════════════════════════════════════════════════════════╝');
 console.log('\n');
 
-// Load the base config
+// Load the config
 if (!fs.existsSync(CONFIG_PATH)) {
     console.error(`❌ Config file not found: ${CONFIG_PATH}`);
     process.exit(1);
 }
 
-const baseConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-
-// Override eventsEmbed with localhost version
-const devConfig = {
-    ...baseConfig,
-    eventsEmbed: LOCAL_EVENTS_EMBED
-};
+const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
 
 console.log('📄 Using config: config/atx-agenda.json');
-console.log('🔄 Overriding eventsEmbed with localhost:8001 version');
+console.log(`📁 Content directory: ${config.contentDir || 'content'}`);
 console.log('');
 
-// Write temporary dev config
-fs.writeFileSync(TEMP_CONFIG_PATH, JSON.stringify(devConfig, null, 2));
+// Run the main setup script with the config
+execSync(`node scripts/setup.js --config config/atx-agenda.json`, {
+    cwd: ROOT_DIR,
+    stdio: 'inherit'
+});
 
-try {
-    // Run the main setup script with the dev config
-    execSync(`node scripts/setup.js --config ${TEMP_CONFIG_PATH}`, {
-        cwd: ROOT_DIR,
-        stdio: 'inherit'
-    });
-} finally {
-    // Clean up temporary config file
-    if (fs.existsSync(TEMP_CONFIG_PATH)) {
-        fs.unlinkSync(TEMP_CONFIG_PATH);
-    }
-}
-
-console.log(
-    '💡 Tip: Make sure the local events embed server is running on port 8001'
-);
+console.log('');
+console.log('💡 To run the dev server with the correct content directory:');
+console.log(`   CONTENT_DIR="${config.contentDir || 'content'}" pnpm dev:all`);
+console.log('');
+console.log('   Or add to your .env.local:');
+console.log(`   CONTENT_DIR=${config.contentDir || 'content'}`);
 console.log('');
