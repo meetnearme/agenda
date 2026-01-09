@@ -56,7 +56,9 @@ export default async function HomePage() {
             <h1 className="text-5xl font-bold tracking-tight text-balance md:text-7xl">
               YOUR WEEKLY GUIDE TO
               <br />
-              <span className="text-primary">LOCAL EVENTS</span>
+              <span className="text-primary">
+                {siteSettings?.herotext || 'LOCAL EVENTS'}
+              </span>
             </h1>
             <p className="text-muted-foreground mx-auto max-w-2xl text-xl text-balance md:text-2xl">
               Discover the best live music, food festivals, art shows, and

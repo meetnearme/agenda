@@ -287,6 +287,7 @@ function applyConfiguration(config, configFilePath = null) {
         description,
         brandColor,
         heroText,
+        eventsTitle,
         beehiiv,
         removeTemplate,
         contentDir
@@ -486,6 +487,16 @@ function applyConfiguration(config, configFilePath = null) {
     // Update CMS config to point to config content directories
     if (contentDir && configFilePath) {
         updateCmsConfig(contentDir, configFilePath);
+    }
+
+    // Update events page title if provided
+    if (eventsTitle && contentDir) {
+        console.log('📄 Updating events page...');
+        const eventsPath = path.join(ROOT_DIR, contentDir, 'events/index.md');
+        if (fs.existsSync(eventsPath)) {
+            replaceInFile(eventsPath, /^title: .*/m, `title: ${eventsTitle}`);
+            console.log(`   ✓ Events title updated to "${eventsTitle}"\n`);
+        }
     }
 
     // Note: We no longer copy content - CMS points directly to config content directory
