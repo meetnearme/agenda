@@ -336,6 +336,10 @@ function applyConfiguration(config, configFilePath = null) {
         /subscribercounttext: .*/g,
         `subscribercounttext: subscribers getting weekly updates`
     );
+
+    if (heroText) {
+        replaceInFile(settingsPath, /herotext: .*/g, `herotext: ${heroText}`);
+    }
     console.log('   ✓ Site settings updated\n');
 
     // Update Home Content (content/home/index.md)

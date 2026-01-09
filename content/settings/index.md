@@ -11,6 +11,7 @@ description:
   community gatherings happening every week.
 footertext: Your weekly guide to local events and community happenings.
 copyrightname: Local Agenda
+herotext: LOCAL EVENTS
 sociallinks:
   - platform: Instagram
     url: https://instagram.com/yourname
