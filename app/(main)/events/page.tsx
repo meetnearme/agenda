@@ -45,49 +45,47 @@ export default async function EventsPage() {
       {/* Embed Section */}
       <div className="px-4 py-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="border-border bg-card rounded-lg border p-8">
-            <div className="space-y-6">
-              {/* Embed Area */}
-              <div className="py-4">
-                {hasRealEmbed ? (
-                  // Render the actual embed code from CMS (client component handles scripts)
-                  <EventsEmbed embedCode={embedCode} />
-                ) : (
-                  // Show placeholder when no real embed is configured
-                  <div className="text-center">
-                    <p className="text-muted-foreground mb-4">
-                      Configure your events embed in the CMS to display live
-                      events
-                    </p>
-                    <div className="border-border bg-muted/30 flex min-h-[500px] items-center justify-center rounded-lg border-2 border-dashed p-12">
-                      <div className="text-center">
-                        <Calendar className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
-                        <p className="text-muted-foreground font-medium">
-                          Events Embed Placeholder
-                        </p>
-                        <p className="text-muted-foreground mt-2 text-sm">
-                          Go to the CMS at /admin to add your embed code
-                        </p>
-                      </div>
+          <div className="space-y-6">
+            {/* Embed Area */}
+            <div className="py-4">
+              {hasRealEmbed ? (
+                // Render the actual embed code from CMS (client component handles scripts)
+                <EventsEmbed embedCode={embedCode} />
+              ) : (
+                // Show placeholder when no real embed is configured
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Configure your events embed in the CMS to display live
+                    events
+                  </p>
+                  <div className="border-border bg-muted/30 flex min-h-[500px] items-center justify-center rounded-lg border-2 border-dashed p-12">
+                    <div className="text-center">
+                      <Calendar className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+                      <p className="text-muted-foreground font-medium">
+                        Events Embed Placeholder
+                      </p>
+                      <p className="text-muted-foreground mt-2 text-sm">
+                        Go to the CMS at /admin to add your embed code
+                      </p>
                     </div>
                   </div>
-                )}
-              </div>
-
-              {/* Instructions - only show if enabled and no real embed yet */}
-              {showInstructions && !hasRealEmbed && instructions.length > 0 && (
-                <div className="border-border border-t pt-6">
-                  <h3 className="text-card-foreground mb-3 text-lg font-bold">
-                    {instructionsTitle}
-                  </h3>
-                  <ol className="text-muted-foreground list-inside list-decimal space-y-2">
-                    {instructions.map((instruction: string, index: number) => (
-                      <li key={index}>{instruction}</li>
-                    ))}
-                  </ol>
                 </div>
               )}
             </div>
+
+            {/* Instructions - only show if enabled and no real embed yet */}
+            {showInstructions && !hasRealEmbed && instructions.length > 0 && (
+              <div className="border-border border-t pt-6">
+                <h3 className="text-card-foreground mb-3 text-lg font-bold">
+                  {instructionsTitle}
+                </h3>
+                <ol className="text-muted-foreground list-inside list-decimal space-y-2">
+                  {instructions.map((instruction: string, index: number) => (
+                    <li key={index}>{instruction}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
           </div>
         </div>
       </div>
