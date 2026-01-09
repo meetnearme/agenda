@@ -30,7 +30,8 @@ fi
 echo ""
 echo "Content directory: $CONTENT_DIR"
 export CONTENT_DIR
-echo "Running Next.js build..."
+echo "Verifying CONTENT_DIR is exported: $CONTENT_DIR"
+echo "Running Next.js build with CONTENT_DIR=$CONTENT_DIR"
 pnpm build
 
 echo ""

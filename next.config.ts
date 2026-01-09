@@ -1,5 +1,8 @@
 import type { NextConfig } from 'next';
 
+// Debug: Log the CONTENT_DIR at config load time
+console.log('[next.config.ts] CONTENT_DIR from env:', process.env.CONTENT_DIR || '(not set, using default: content)');
+
 const nextConfig: NextConfig = {
   // Pass CONTENT_DIR env var to the build for config-driven content directories
   env: {
