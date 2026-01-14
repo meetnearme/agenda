@@ -1,6 +1,6 @@
 ---
 templatekey: update-post
-title: Austin Events This Week
+title: Austin Events This Week (Jan 14-20)
 date: 2026-01-14T21:43:00.000+01:00
 description: Austin's weekly roundup of local events happening this week
 featuredpost: true
@@ -72,3 +72,8 @@ Smooth jazz and swing to close out the weekend
 • AcroYoga Class (Not for Beginners)  8:00pm @ Impact Martial Arts (North Austin)
 
 Advanced acro practice for experienced students
+
+
+That's your Austin agenda for this week! Find more events at [Meet Near Me](<>).
+
+*Have an event to share? Reply to this email or tag us @atxagenda*
