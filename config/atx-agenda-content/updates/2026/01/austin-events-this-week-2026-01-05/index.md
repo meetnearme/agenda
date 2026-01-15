@@ -49,6 +49,6 @@ Happy New Year, Austin! Here's what's happening around town this week.
 
 ---
 
-That's your Austin agenda for this week! Find more events at [Meet Near Me](https://devnear.me/?location=Austin%2C+Texas).
+That's your Austin agenda for this week! Find more events at [Meet Near Me](https://atxagenda.com?radius=50&lat=30.3038&lon=-97.7545&location=Austin%2C+Texas).
 
 _Have an event to share? Reply to this email or tag us @atxagenda_

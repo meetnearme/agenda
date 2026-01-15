@@ -14,6 +14,8 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const matter = require('gray-matter');
+const yaml = require('js-yaml');
 
 const ROOT_DIR = path.join(__dirname, '..');
 
@@ -307,64 +309,118 @@ function applyConfiguration(config, configFilePath = null) {
     );
 
     // Update Site Settings (content/settings/index.md)
+    // Data-driven approach: map JSON config keys to YAML keys and update if they exist
     console.log('📄 Updating site settings...');
     const settingsPath = path.join(ROOT_DIR, 'content/settings/index.md');
 
-    if (orgName) {
-        replaceInFile(settingsPath, /sitename: .*/g, `sitename: ${orgName}`);
-        replaceInFile(
-            settingsPath,
-            /copyrightname: .*/g,
-            `copyrightname: ${orgName}`
-        );
-    }
+    const fileContents = fs.readFileSync(settingsPath, 'utf8');
+    const { data, content: bodyContent } = matter(fileContents);
 
-    if (tagline) {
-        replaceInFile(settingsPath, /tagline: .*/g, `tagline: ${tagline}`);
-    }
+    // Mapping from JSON config keys to YAML keys in settings file
+    // Format: { jsonKey: 'yamlKey' } or { jsonKey: ['yamlKey1', 'yamlKey2'] } for multiple mappings
+    const configToYamlMapping = {
+        orgName: ['sitename', 'copyrightname'], // orgName maps to both sitename and copyrightname
+        tagline: 'tagline',
+        description: 'description',
+        heroText: 'herotext'
+    };
 
-    if (description) {
-        // Handle multi-line YAML description field
-        // Match: description: followed by either single-line value or multi-line indented block
-        const content = fs.readFileSync(settingsPath, 'utf8');
-        // Pattern matches description: and everything (including newlines) until next top-level key
-        // Next key starts at beginning of line (^) with a letter, or we hit --- (end of frontmatter)
-        const descriptionPattern = /^description:[\s\S]*?(?=\n[A-Za-z][^:]*:|\n---|$)/m;
-        const updatedContent = content.replace(
-            descriptionPattern,
-            `description: ${description}`
-        );
-        if (content !== updatedContent) {
-            fs.writeFileSync(settingsPath, updatedContent);
+    // Update YAML fields based on config - only if they exist in config
+    Object.entries(configToYamlMapping).forEach(([jsonKey, yamlKeys]) => {
+        const configValue = config[jsonKey];
+        if (
+            configValue !== undefined &&
+            configValue !== null &&
+            configValue !== ''
+        ) {
+            if (Array.isArray(yamlKeys)) {
+                // Multiple YAML keys map to one JSON key
+                yamlKeys.forEach((yamlKey) => {
+                    data[yamlKey] = configValue;
+                });
+            } else {
+                // Single YAML key maps to one JSON key
+                data[yamlKeys] = configValue;
+            }
         }
+    });
+
+    // Handle brandColor separately (needs hex conversion)
+    if (brandColor !== undefined && brandColor !== null && brandColor !== '') {
+        data.brandcolor = primaryColorHex;
     }
 
-    replaceInFile(settingsPath, /subscribercount: .*/g, `subscribercount: ''`);
-    replaceInFile(
-        settingsPath,
-        /subscribercounttext: .*/g,
-        `subscribercounttext: subscribers getting weekly updates`
-    );
-
-    if (heroText) {
-        replaceInFile(settingsPath, /herotext: .*/g, `herotext: ${heroText}`);
+    // Handle nested beehiiv object - merge into newsletter if it exists in config
+    if (beehiiv && typeof beehiiv === 'object') {
+        if (!data.newsletter) {
+            data.newsletter = {};
+        }
+        // Update newsletter fields from beehiiv config if they exist
+        Object.entries(beehiiv).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                // Convert camelCase to the format used in YAML (e.g., embedCode stays embedCode)
+                data.newsletter[key] = value;
+            }
+        });
     }
+
+    // Always update these defaults (not from config, but required)
+    data.subscribercount = '';
+    data.subscribercounttext = 'subscribers getting weekly updates';
+
+    // Stringify back to YAML and reconstruct the file
+    const yamlContent = yaml.dump(data, {
+        lineWidth: -1, // Don't wrap lines
+        noRefs: true, // Don't use YAML references
+        quotingType: "'", // Use single quotes to match existing format
+        forceQuotes: false // Only quote when necessary
+    });
+
+    const updatedContent = `---\n${yamlContent}---${bodyContent ? '\n' + bodyContent : ''}`;
+    fs.writeFileSync(settingsPath, updatedContent);
     console.log('   ✓ Site settings updated\n');
 
     // Update Home Content (content/home/index.md)
+    // Data-driven approach: map JSON config keys to YAML keys
     console.log('📄 Updating home content...');
     const homePath = path.join(ROOT_DIR, 'content/home/index.md');
-    if (orgName) {
-        replaceInFile(homePath, /title: Local Agenda/g, `title: ${orgName}`);
-    }
-    if (tagline) {
-        replaceInFile(homePath, /tagline: .*/g, `tagline: ${tagline}`);
-    }
-    replaceInFile(
-        homePath,
-        /footerbiotext: .*/g,
-        `footerbiotext: Your weekly guide to local events and community happenings.`
-    );
+
+    const homeFileContents = fs.readFileSync(homePath, 'utf8');
+    const { data: homeData, content: homeBodyContent } =
+        matter(homeFileContents);
+
+    // Mapping from JSON config keys to YAML keys in home content file
+    const homeConfigToYamlMapping = {
+        orgName: 'title',
+        tagline: 'tagline'
+    };
+
+    // Update YAML fields based on config - only if they exist in config
+    Object.entries(homeConfigToYamlMapping).forEach(([jsonKey, yamlKey]) => {
+        const configValue = config[jsonKey];
+        if (
+            configValue !== undefined &&
+            configValue !== null &&
+            configValue !== ''
+        ) {
+            homeData[yamlKey] = configValue;
+        }
+    });
+
+    // Always update footerbiotext default
+    homeData.footerbiotext =
+        'Your weekly guide to local events and community happenings.';
+
+    // Stringify back to YAML and reconstruct the file
+    const homeYamlContent = yaml.dump(homeData, {
+        lineWidth: -1,
+        noRefs: true,
+        quotingType: "'",
+        forceQuotes: false
+    });
+
+    const updatedHomeContent = `---\n${homeYamlContent}---${homeBodyContent ? '\n' + homeBodyContent : ''}`;
+    fs.writeFileSync(homePath, updatedHomeContent);
     console.log('   ✓ Home content updated\n');
 
     // Update globals.css with brand color (OKLCH for CSS)
@@ -402,82 +458,9 @@ function applyConfiguration(config, configFilePath = null) {
     );
     console.log('   ✓ Brand color updated in CSS\n');
 
-    // Update site settings with brand color (hex for CMS editing)
-    console.log('🎨 Saving brand color to settings...');
-    replaceInFile(
-        settingsPath,
-        /brandcolor: .*/g,
-        `brandcolor: '${primaryColorHex}'`
-    );
-    // If brandcolor doesn't exist, add it after sitename
-    const settingsContent = fs.readFileSync(settingsPath, 'utf8');
-    if (!settingsContent.includes('brandcolor:')) {
-        const updatedSettings = settingsContent.replace(
-            /(sitename: .*)$/m,
-            `$1\nbrandcolor: '${primaryColorHex}'`
-        );
-        fs.writeFileSync(settingsPath, updatedSettings);
-    }
-    console.log('   ✓ Brand color saved to CMS settings\n');
-
     // Note: Events embed is now CMS-driven via contentDir/events/index.md
     // No direct file manipulation needed - CMS points to the correct file
-
-    // Update Beehiiv settings
-    if (
-        beehiiv &&
-        (beehiiv.embedCode ||
-            beehiiv.publicationId ||
-            beehiiv.apiKey ||
-            beehiiv.subscribeUrl)
-    ) {
-        console.log('📧 Saving Beehiiv settings...');
-        let currentSettings = fs.readFileSync(settingsPath, 'utf8');
-
-        // Update newsletter mode
-        if (beehiiv.mode) {
-            currentSettings = currentSettings.replace(
-                /newsletter:\s*\n\s*mode: .*/,
-                `newsletter:\n  mode: ${beehiiv.mode}`
-            );
-        }
-
-        // Update embed code
-        if (beehiiv.embedCode) {
-            const escapedEmbedCode = beehiiv.embedCode.replace(/'/g, "''");
-            currentSettings = currentSettings.replace(
-                /embedCode: .*/,
-                `embedCode: '${escapedEmbedCode}'`
-            );
-        }
-
-        // Update publication ID
-        if (beehiiv.publicationId) {
-            currentSettings = currentSettings.replace(
-                /publicationId: .*/,
-                `publicationId: '${beehiiv.publicationId}'`
-            );
-        }
-
-        // Update API key
-        if (beehiiv.apiKey) {
-            currentSettings = currentSettings.replace(
-                /apiKey: .*/,
-                `apiKey: '${beehiiv.apiKey}'`
-            );
-        }
-
-        // Update subscribe URL
-        if (beehiiv.subscribeUrl) {
-            currentSettings = currentSettings.replace(
-                /subscribeUrl: .*/,
-                `subscribeUrl: '${beehiiv.subscribeUrl}'`
-            );
-        }
-
-        fs.writeFileSync(settingsPath, currentSettings);
-        console.log('   ✓ Beehiiv settings saved\n');
-    }
+    // Brand color and Beehiiv settings are now handled above in the YAML parsing block
 
     // Update navigation lib
     console.log('📄 Updating navigation defaults...');
