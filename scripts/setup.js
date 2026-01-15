@@ -324,11 +324,19 @@ function applyConfiguration(config, configFilePath = null) {
     }
 
     if (description) {
-        replaceInFile(
-            settingsPath,
-            /description: .*/g,
+        // Handle multi-line YAML description field
+        // Match: description: followed by either single-line value or multi-line indented block
+        const content = fs.readFileSync(settingsPath, 'utf8');
+        // Pattern matches description: and everything (including newlines) until next top-level key
+        // Next key starts at beginning of line (^) with a letter, or we hit --- (end of frontmatter)
+        const descriptionPattern = /^description:[\s\S]*?(?=\n[A-Za-z][^:]*:|\n---|$)/m;
+        const updatedContent = content.replace(
+            descriptionPattern,
             `description: ${description}`
         );
+        if (content !== updatedContent) {
+            fs.writeFileSync(settingsPath, updatedContent);
+        }
     }
 
     replaceInFile(settingsPath, /subscribercount: .*/g, `subscribercount: ''`);

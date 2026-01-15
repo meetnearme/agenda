@@ -5,17 +5,18 @@ date: 2026-01-14T21:43:00.000+01:00
 description: Austin's weekly roundup of local events happening this week
 featuredpost: true
 ---
+
 ### Wednesday, January 14
 
 • Lakeway Nights Farmer’s Market 3:00pm @ Austin
 
 Fresh local produce, vendors, and community vibes
 
-• AJS Presents: Wilson Marks Quartet  8:00pm @ Monks Jazz
+• AJS Presents: Wilson Marks Quartet 8:00pm @ Monks Jazz
 
 Live jazz from an incredible local quartet
 
-• Nineties Karaoke (hosted by Fen)  9:00pm @ 1500 E 6th St
+• Nineties Karaoke (hosted by Fen) 9:00pm @ 1500 E 6th St
 
 Throw it back and sing your favorite ‘90s hits
 
@@ -29,7 +30,7 @@ Targeted training to improve performance and prevent injury
 
 High-energy dance workout with Latin rhythms
 
-• AcroYoga Class: Beginners & Beyond  8:00pm @ Impact Martial Arts
+• AcroYoga Class: Beginners & Beyond 8:00pm @ Impact Martial Arts
 
 Partner-based movement, strength, and balance
 
@@ -43,37 +44,36 @@ Darkwave, goth, and alternative sounds late into the night
 
 ### Friday, January 16
 
-• Chicon Mal, Wezmer, Zeno  10:00pm @ Austin
+• Chicon Mal, Wezmer, Zeno 10:00pm @ Austin
 
 Live electronic / experimental sounds to kick off the weekend
 
 ### Saturday, January 17
 
-• San Antonio Bubbleicious Bubble Run  12:00pm @ San Antonio
+• San Antonio Bubbleicious Bubble Run 12:00pm @ San Antonio
 
 A colorful, family-friendly run (worth the short road trip)
 
-• Orión García  10:00pm @ 1500 E 6th St
+• Orión García 10:00pm @ 1500 E 6th St
 
 Late-night live music with a local favorite
 
 ### Sunday, January 18
 
-• Vixens of Volstead Drag Brunch  12:00pm @ 1500 E 6th St
+• Vixens of Volstead Drag Brunch 12:00pm @ 1500 E 6th St
 
 Drag, brunch, and bold performances
 
-• Julie Slim & Rendezvous  8:00pm @ 310 E St. Elmo Rd
+• Julie Slim & Rendezvous 8:00pm @ 310 E St. Elmo Rd
 
 Smooth jazz and swing to close out the weekend
 
 ### Tuesday, January 20
 
-• AcroYoga Class (Not for Beginners)  8:00pm @ Impact Martial Arts (North Austin)
+• AcroYoga Class (Not for Beginners) 8:00pm @ Impact Martial Arts (North Austin)
 
 Advanced acro practice for experienced students
 
+That's your Austin agenda for this week! Find more events at [Meet Near Me]().
 
-That's your Austin agenda for this week! Find more events at [Meet Near Me](<>).
-
-*Have an event to share? Reply to this email or tag us @atxagenda*
+_Have an event to share? Reply to this email or tag us @atxagenda_
