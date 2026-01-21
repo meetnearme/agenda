@@ -1,7 +1,7 @@
 ---
 templatekey: update-post
 title: Austin Events This Week (Jan 21 - 25)
-date: 2026-01-21T16:08:00.000+01:00
+date: 2026-01-21T17:47:00.000+01:00
 description: Looking for things to do in Austin this week? We’ve rounded up the
   best markets, classes, live music, and events happening around the city,
   something for every vibe and schedule.
