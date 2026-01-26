@@ -1,17 +1,18 @@
 # Local Agenda - Community Newsletter Template
 
-A free, open-source template for creating hyper-local community newsletters. Built with Next.js 16, Tailwind CSS, and Decap CMS.
+A free, open-source template for creating hyper-local community newsletters. Built with Eleventy (11ty), Tailwind CSS, and Decap CMS.
 
-<!-- Netlify Status Badges (update URLs after creating Netlify sites) -->
+<!-- Netlify Status Badge -->
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE-NAME/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/atxagenda/deploys)
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/local-newsletter)
 
 ## Features
 
-- ⚡ **One-Click Deploy** - Get your site live in minutes with Netlify
+- ⚡ **Blazing Fast** - Built with Eleventy for sub-second build times
 - 🆓 **100% Free Hosting** - No monthly fees with Netlify's free tier
+- 📦 **Tiny Bundle Size** - ~50KB total (vs 2MB+ with React frameworks)
 - 📅 **Local Events Integration** - Built-in support for Meet Near Me platform
 - ✏️ **Easy Content Management** - Decap CMS for non-technical users
 - 🎨 **No-Code Branding** - Change site name, colors, and social links via CMS
@@ -39,13 +40,13 @@ pnpm install
 # Run the setup wizard (customize your newsletter)
 pnpm setup
 
-# Start development (runs both Next.js and CMS proxy)
+# Start development (runs both 11ty and CMS proxy)
 pnpm dev:all
 ```
 
-Visit `http://localhost:3001` to see your site, and `http://localhost:3001/admin` to access the CMS.
+Visit `http://localhost:3002` to see your site, and `http://localhost:3002/admin` to access the CMS.
 
-> **Note:** `pnpm dev:all` is the recommended way to start development. It runs both the Next.js dev server and the Decap CMS local proxy together, allowing you to edit content via the CMS without needing Netlify authentication.
+> **Note:** `pnpm dev:all` is the recommended way to start development. It runs both the 11ty dev server and the Decap CMS local proxy together, allowing you to edit content via the CMS without needing Netlify authentication.
 
 ## Setup Wizard
 
@@ -119,23 +120,44 @@ After deploying to Netlify:
 ## Project Structure
 
 ```
-├── app/                    # Next.js App Router pages
-│   ├── (main)/            # Main site routes
-│   │   ├── page.tsx       # Homepage
-│   │   ├── updates/          # Updates listing & posts
-│   │   ├── events/        # Events page
-│   │   └── template/      # Template info page
-│   └── globals.css        # Global styles & theme
-├── components/            # React components
-├── content/               # Markdown content (CMS-managed)
-│   ├── updates/             # Update posts
-│   ├── events/           # Events page content
-│   ├── home/             # Homepage content & navigation
-│   └── settings/         # Site branding & settings
-├── lib/                   # Utility functions
+├── src/                    # 11ty source files
+│   ├── pages/             # Page templates (Nunjucks)
+│   │   ├── index.njk      # Homepage
+│   │   ├── updates.njk    # Updates listing
+│   │   ├── events.njk     # Events page
+│   │   └── updates/
+│   │       └── post.njk   # Individual post template
+│   ├── _includes/         # Layouts and components
+│   │   ├── layouts/
+│   │   │   └── base.njk   # Base HTML layout
+│   │   └── components/
+│   │       ├── header.njk # Site header
+│   │       └── footer.njk # Site footer
+│   ├── _data/             # Global data files (JavaScript)
+│   │   ├── siteSettings.js   # Site branding & settings
+│   │   ├── homeContent.js    # Homepage content
+│   │   └── eventsContent.js  # Events page content
+│   ├── css/
+│   │   └── main.css       # Tailwind CSS entry point
+│   ├── js/
+│   │   └── main.js        # Client-side JavaScript
+│   └── static/            # Static assets
+├── content/               # Markdown content (CMS-managed, default)
+│   ├── updates/           # Update posts
+│   ├── events/            # Events page content
+│   ├── home/              # Homepage content & navigation
+│   ├── settings/          # Site branding & settings
+│   └── pages/             # Additional pages
+├── config/                # Multi-site configurations
+│   ├── atx-agenda.json    # ATX Agenda config
+│   ├── marketing.json     # Marketing site config
+│   └── atx-agenda-content/   # ATX-specific content
 ├── public/
-│   └── admin/            # Decap CMS configuration
-└── types/                 # TypeScript types
+│   ├── admin/             # Decap CMS configuration
+│   └── content/           # Media uploads (images)
+├── netlify/
+│   └── functions/         # Netlify Functions (TypeScript)
+└── _site/                 # Build output (ignored in git)
 ```
 
 ## Branding & Customization
@@ -155,28 +177,29 @@ All branding can be changed directly in the CMS at `/admin` under **⚙️ Site 
 | **Newsletter Button** | Subscribe button text                        |
 | **Subscriber Count**  | "Join 5,000+ locals..." number               |
 
-### Changing Colors (Code)
+### Changing Colors
 
-For deeper customization, edit the CSS variables in `app/globals.css`:
+**Via CMS (Recommended):**
+Go to `/admin` → **⚙️ Site Settings** → **Brand Color** and choose from presets or enter a custom hex color.
+
+**Via Code:**
+Edit the CSS variables in `src/css/main.css`:
 
 ```css
 :root {
-    --primary: oklch(0.87 0.18 127); /* Lime green accent */
-    --background: oklch(0.12 0 0); /* Dark background */
-    --foreground: oklch(0.98 0 0); /* Text color */
-    --card: oklch(0.16 0 0); /* Card backgrounds */
-    /* ... other colors */
+    --color-primary: oklch(0.87 0.18 127); /* Lime green accent */
+    /* Theme is automatically injected by setup script */
 }
 ```
 
 **Color Tips:**
 
-- Change `--primary` to match your brand color
-- The template uses [OKLCH color space](https://oklch.com/) for better color consistency
+- The setup script converts hex colors to OKLCH automatically
+- OKLCH provides better color consistency across themes
 - Try these accent colors:
-    - Blue: `oklch(0.7 0.15 250)`
-    - Orange: `oklch(0.75 0.18 50)`
-    - Purple: `oklch(0.65 0.2 300)`
+    - Blue: `#3b82f6`
+    - Orange: `#f97316`
+    - Purple: `#8b5cf6`
 
 ### Navigation
 
@@ -192,25 +215,39 @@ The events page supports embedding external event widgets (like Meet Near Me). C
 
 ## Tech Stack
 
-- **Framework**: [Next.js 16](https://nextjs.org/) with App Router
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **Framework**: [Eleventy (11ty)](https://www.11ty.dev/) - Fast, simple static site generator
+- **Templating**: [Nunjucks](https://mozilla.github.io/nunjucks/) - Powerful templating language
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **UI Components**: [DaisyUI](https://daisyui.com/) - Tailwind component library
+- **Interactivity**: [Alpine.js](https://alpinejs.dev/) - Lightweight JavaScript framework
 - **CMS**: [Decap CMS](https://decapcms.org/) (formerly Netlify CMS)
 - **Hosting**: [Netlify](https://netlify.com/)
-- **Language**: TypeScript
+- **Functions**: TypeScript (for Netlify Functions)
+
+## Why Eleventy?
+
+This template was migrated from Next.js to Eleventy for several key reasons:
+
+- **Faster builds**: ~5 seconds vs ~30 seconds with Next.js
+- **Simpler architecture**: No React complexity for a content-focused site
+- **Smaller bundles**: ~50KB vs 2MB+ JavaScript payload
+- **Better for SEO**: True static HTML, no hydration delays
+- **Lower barrier to entry**: HTML + Nunjucks is easier than React/TSX
+- **Perfect for newsletters**: Content-first sites don't need a full React framework
 
 ## Scripts
 
-| Command          | Description                                    |
-| ---------------- | ---------------------------------------------- |
-| `pnpm setup`     | **Run first** - Customize for your newsletter  |
-| `pnpm setup:dev` | Setup with ATX Agenda config (localhost embed) |
-| `pnpm dev:all`   | **Recommended** - Start dev server + CMS proxy |
-| `pnpm dev`       | Start Next.js development server only          |
-| `pnpm dev:cms`   | Start Decap CMS local proxy only               |
-| `pnpm build`     | Build for production (static export)           |
-| `pnpm start`     | Start production server                        |
-| `pnpm lint`      | Run ESLint                                     |
+| Command              | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| `pnpm setup`         | **Run first** - Customize for your newsletter     |
+| `pnpm setup:dev`     | Setup with ATX Agenda config (localhost embed)    |
+| `pnpm dev:all`       | **Recommended** - Start 11ty + CMS proxy together |
+| `pnpm dev`           | Start 11ty development server only                |
+| `pnpm dev:cms`       | Start Decap CMS local proxy only                  |
+| `pnpm build`         | Build for production (generates `_site/`)         |
+| `pnpm build:ci`      | Build for Netlify CI/CD                           |
+| `pnpm build:atx-agenda` | Build with ATX Agenda config                   |
+| `pnpm build:marketing`  | Build with Marketing config                    |
 
 ## Contributing
 
