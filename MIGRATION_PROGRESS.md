@@ -363,6 +363,29 @@
 - Newsletter subscription function works with 11ty
 - All deployment configurations verified and ready
 
+### ✅ Task 16g: Fix home page showing only 2 posts instead of 3
+- [x] Identify postGrid shortcode filtering for featured posts only
+- [x] Change home page to show recent posts instead of featured posts
+- [x] Verify all 3 posts display on home page
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `src/pages/index.njk` (changed postGrid parameter from `true` to `false`)
+
+**Issue:**
+- Home page called `{% postGrid true, 3 %}` which shows only featured posts
+- Only 2 of 3 posts were marked as `featuredpost: true`
+- Result: Home page showed 2 posts, Updates page showed all 3
+
+**Solution:**
+- Changed to `{% postGrid false, 3 %}` to show 3 most recent posts regardless of featured status
+- Alternative: Could mark all posts as featured in CMS
+
+**Impact:**
+- Home page now shows all 3 recent posts consistently with Updates page
+- Better user experience with complete post listing
+
 ### ✅ Task 16f: Fix Netlify Next.js plugin conflict
 - [x] Identify Next.js plugin auto-detection issue
 - [x] Document removal steps in netlify.toml
