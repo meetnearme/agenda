@@ -174,11 +174,8 @@ function copyDirectory(src, dest) {
  * Remove template page and all references to it
  */
 function removeTemplatePage() {
-    const navPath = path.join(ROOT_DIR, 'lib/navigation.ts');
-
     // Remove template page directory
     console.log('🗑️  Removing template page...');
-    deleteDirectory(path.join(ROOT_DIR, 'app/(main)/template'));
     deleteDirectory(path.join(ROOT_DIR, 'content/template'));
     console.log('   ✓ Template page removed\n');
 
@@ -194,32 +191,12 @@ function removeTemplatePage() {
         fs.writeFileSync(homeContentPath, updatedHomeContent);
     }
 
-    // Remove from navigation.ts
-    if (fs.existsSync(navPath)) {
-        const navContent = fs.readFileSync(navPath, 'utf8');
-        const updatedNavContent = navContent.replace(
-            /  {\n    title: 'Template',\n    slug: '\/template',\n  },\n/g,
-            ''
-        );
-        fs.writeFileSync(navPath, updatedNavContent);
-    }
-    console.log('   ✓ Navigation cleaned up\n');
+    // Note: In 11ty, navigation is handled via global data (homeContent)
+    // No separate navigation file to update
+    console.log('   ✓ Navigation updated via home content\n');
 
-    // Remove Template CTA from homepage
-    console.log('📄 Removing template CTA from homepage...');
-    const homepagePath = path.join(ROOT_DIR, 'app/(main)/page.tsx');
-    if (fs.existsSync(homepagePath)) {
-        let homepageContent = fs.readFileSync(homepagePath, 'utf8');
-        // Remove Code2 import
-        homepageContent = homepageContent.replace(/, Code2/g, '');
-        // Remove the Template CTA section
-        homepageContent = homepageContent.replace(
-            /\s*{\/\* Template CTA Section \*\/}[\s\S]*?<\/section>/,
-            ''
-        );
-        fs.writeFileSync(homepagePath, homepageContent);
-    }
-    console.log('   ✓ Homepage CTA removed\n');
+    // Note: In 11ty, the homepage is template-based (src/pages/index.njk)
+    // No hardcoded CTA sections to remove
 
     // Update CMS config to remove template collection
     console.log('📄 Updating CMS config...');
@@ -423,9 +400,9 @@ function applyConfiguration(config, configFilePath = null) {
     fs.writeFileSync(homePath, updatedHomeContent);
     console.log('   ✓ Home content updated\n');
 
-    // Update globals.css with brand color (OKLCH for CSS)
+    // Update main.css with brand color (OKLCH for CSS)
     console.log('🎨 Updating brand color in CSS...');
-    const cssPath = path.join(ROOT_DIR, 'app/globals.css');
+    const cssPath = path.join(ROOT_DIR, 'src/css/main.css');
     replaceInFile(
         cssPath,
         /--primary: oklch\([^)]+\)/g,
@@ -462,18 +439,9 @@ function applyConfiguration(config, configFilePath = null) {
     // No direct file manipulation needed - CMS points to the correct file
     // Brand color and Beehiiv settings are now handled above in the YAML parsing block
 
-    // Update navigation lib
-    console.log('📄 Updating navigation defaults...');
-    const navPath = path.join(ROOT_DIR, 'lib/navigation.ts');
-    if (orgName) {
-        replaceInFile(navPath, /title: 'Local Agenda'/g, `title: '${orgName}'`);
-        replaceInFile(
-            navPath,
-            /author: 'Local Agenda Team'/g,
-            `author: '${orgName} Team'`
-        );
-    }
-    console.log('   ✓ Navigation updated\n');
+    // Navigation is now handled via 11ty global data (homeContent)
+    // No separate navigation file to update
+    console.log('📄 Navigation configuration handled via home content\n');
 
     // Update CMS config to point to config content directories
     if (contentDir && configFilePath) {
