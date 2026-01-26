@@ -248,12 +248,24 @@ function updateCmsConfig(contentDir, configFilePath) {
         `$1${contentDir}/events/index.md`
     );
 
+    // Targeted replacement 4: Update settings collection's file path
+    cmsContent = cmsContent.replace(
+        /(- name: settings[\s\S]*?- file: )[^\n]+/,
+        `$1${contentDir}/settings/index.md`
+    );
+
+    // Targeted replacement 5: Update home collection's file path
+    cmsContent = cmsContent.replace(
+        /(- name: home[\s\S]*?- file: )[^\n]+/,
+        `$1${contentDir}/home/index.md`
+    );
+
     fs.writeFileSync(cmsConfigPath, cmsContent);
     console.log(`   ✓ Site Config now uses ${configFilePath}`);
     console.log(`   ✓ Updates collection now points to ${contentDir}/updates`);
-    console.log(
-        `   ✓ Events collection now points to ${contentDir}/events/index.md\n`
-    );
+    console.log(`   ✓ Events collection now points to ${contentDir}/events/index.md`);
+    console.log(`   ✓ Settings collection now points to ${contentDir}/settings/index.md`);
+    console.log(`   ✓ Home collection now points to ${contentDir}/home/index.md\n`);
 }
 
 /**

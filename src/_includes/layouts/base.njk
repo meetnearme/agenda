@@ -65,5 +65,10 @@
   {# Alpine.js for interactive components #}
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+  {# Beehiiv embed script - load once if iframe mode is enabled with Beehiiv embed #}
+  {% if siteSettings.newsletter.mode == 'iframe' and siteSettings.newsletter.embedCode and 'beehiiv' in siteSettings.newsletter.embedCode %}
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+  {% endif %}
+
 </body>
 </html>

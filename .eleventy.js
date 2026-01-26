@@ -13,14 +13,19 @@ module.exports = function(eleventyConfig) {
 
   // Pass-through copies
   eleventyConfig.addPassthroughCopy({ "src/static": "/" });
-  eleventyConfig.addPassthroughCopy("public/admin");
+  eleventyConfig.addPassthroughCopy({ "src/js": "/js" });
+  eleventyConfig.addPassthroughCopy({ "public/admin": "/admin" });
   eleventyConfig.addPassthroughCopy({ "content": "/content" });
   eleventyConfig.addPassthroughCopy({ [CONTENT_DIR]: `/${CONTENT_DIR}` });
 
   // Watch targets
   eleventyConfig.addWatchTarget("./src/css/");
+  eleventyConfig.addWatchTarget("./src/js/");
+  // Only watch content directory if it's not the default 'content' (avoid duplicate watches)
+  if (CONTENT_DIR !== 'content') {
+    eleventyConfig.addWatchTarget(`./${CONTENT_DIR}/**/*.md`);
+  }
   eleventyConfig.addWatchTarget("./content/**/*.md");
-  eleventyConfig.addWatchTarget(`./${CONTENT_DIR}/**/*.md`);
 
   // Custom markdown-it instance with plugin to preserve custom HTML tags
   const md = markdownIt({
@@ -381,10 +386,14 @@ module.exports = function(eleventyConfig) {
     const hasValidEmbed = embedCode.includes('beehiiv') || embedCode.includes('<iframe') || embedCode.includes('<script');
 
     if (mode === 'iframe' && hasValidEmbed) {
+      // Strip out <script> tags - they'll be loaded once in the base layout
+      // Keep only the iframe and other HTML
+      const embedWithoutScripts = embedCode.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+
       return `
         <div class="newsletter-signup-iframe my-8">
           <div class="beehiiv-embed-container overflow-hidden rounded-lg" style="min-height: 320px">
-            ${embedCode}
+            ${embedWithoutScripts}
           </div>
         </div>
       `;

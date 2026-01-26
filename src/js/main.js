@@ -100,27 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Execute Beehiiv embed scripts if present
-  const beehiivContainers = document.querySelectorAll('.beehiiv-embed-container');
-  beehiivContainers.forEach(container => {
-    const scripts = container.querySelectorAll('script');
-    scripts.forEach(script => {
-      if (script.src) {
-        // External script
-        const newScript = document.createElement('script');
-        newScript.src = script.src;
-        newScript.async = true;
-        document.head.appendChild(newScript);
-      } else if (script.textContent) {
-        // Inline script
-        try {
-          eval(script.textContent);
-        } catch (error) {
-          console.error('Error executing Beehiiv script:', error);
-        }
-      }
-    });
-  });
+  // Note: Beehiiv embed script is now loaded once in base layout
+  // No need for client-side script execution - everything is static at build time
 });
 
 // Log that JS loaded successfully
