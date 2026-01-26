@@ -1,0 +1,62 @@
+---
+layout: base.njk
+title: Events
+permalink: /events/
+---
+
+<div class="bg-background min-h-screen px-4 py-16">
+  <div class="container mx-auto max-w-4xl">
+    {# Page Header #}
+    <div class="mb-8 text-center">
+      <h1 class="text-foreground mb-4 text-4xl font-bold md:text-5xl">
+        {{ eventsContent.title or 'EVENTS' }}
+      </h1>
+      {% if eventsContent.subtitle %}
+        <p class="text-muted-foreground text-xl">
+          {{ eventsContent.subtitle }}
+        </p>
+      {% endif %}
+    </div>
+
+    {# Embed Code (Luma or other calendar) #}
+    {% if eventsContent.embedcode %}
+      <div class="mb-12 overflow-hidden rounded-lg">
+        <div class="events-embed-container" style="min-height: 600px">
+          {{ eventsContent.embedcode | safe }}
+        </div>
+      </div>
+    {% else %}
+      {# Placeholder if no embed code #}
+      <div class="border-border bg-card mb-12 rounded-lg border p-12 text-center">
+        <svg class="text-muted-foreground mx-auto mb-4 h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="text-foreground mb-2 text-xl font-semibold">Events Calendar</h3>
+        <p class="text-muted-foreground">
+          Add your calendar embed code in the CMS to display events here.
+        </p>
+      </div>
+    {% endif %}
+
+    {# Instructions Section #}
+    {% if eventsContent.showInstructions and eventsContent.instructions %}
+      <div class="border-border bg-card rounded-lg border p-8">
+        <h2 class="text-card-foreground mb-4 text-2xl font-bold">
+          {{ eventsContent.instructionstitle or 'How to Submit an Event' }}
+        </h2>
+        <ol class="text-muted-foreground list-inside list-decimal space-y-2">
+          {% for instruction in eventsContent.instructions %}
+            <li>{{ instruction }}</li>
+          {% endfor %}
+        </ol>
+      </div>
+    {% endif %}
+
+    {# Additional Content from Markdown #}
+    {% if eventsContent.content %}
+      <div class="prose prose-invert mx-auto mt-12">
+        {{ eventsContent.content | renderMarkdown | safe }}
+      </div>
+    {% endif %}
+  </div>
+</div>

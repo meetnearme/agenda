@@ -1,0 +1,60 @@
+<footer class="border-t border-border bg-background">
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+      {# Copyright #}
+      <div class="text-center md:text-left">
+        <div class="text-sm text-muted-foreground">
+          © {% now "year" %} {{ siteSettings.copyrightname or 'Local Agenda' }}. All rights reserved.
+        </div>
+        {% if siteSettings.footertext %}
+          <div class="mt-1 text-xs text-muted-foreground/70">
+            {{ siteSettings.footertext }}
+          </div>
+        {% endif %}
+      </div>
+
+      {# Links #}
+      <div class="flex items-center gap-6">
+        <a
+          class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          href="/updates"
+        >
+          Updates
+        </a>
+        <a
+          href="/events"
+          class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Events
+        </a>
+        {% if siteSettings.sociallinks %}
+          {% for link in siteSettings.sociallinks %}
+            {% if link.url %}
+              <a
+                href="{{ link.url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {{ link.platform }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {# Built with #}
+      <div class="text-sm text-muted-foreground">
+        Built with{' '}
+        <a
+          href="https://www.11ty.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary transition-colors hover:text-primary/80"
+        >
+          Eleventy
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

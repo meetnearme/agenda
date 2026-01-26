@@ -1,0 +1,134 @@
+---
+layout: base.njk
+title: Home
+permalink: /
+---
+
+{# Hero Section #}
+<section class="relative overflow-hidden px-4 py-20 md:py-32">
+  {# Background Images - Side by Side (configurable via CMS) #}
+  {% set heroLeftImage = siteSettings.heroimages.left if siteSettings.heroimages else '/content/home/cat_arts-community_00.jpeg' %}
+  {% set heroRightImage = siteSettings.heroimages.right if siteSettings.heroimages else '/content/home/cat_health-wellness_00.jpeg' %}
+  {% set heroOpacity = siteSettings.heroimages.opacity if siteSettings.heroimages else 0.2 %}
+
+  <div class="absolute inset-0 flex">
+    <div
+      class="h-full w-1/2 bg-cover bg-center"
+      style="background-image: url({{ heroLeftImage }}); opacity: {{ heroOpacity }};"
+    ></div>
+    <div
+      class="h-full w-1/2 bg-cover bg-center"
+      style="background-image: url({{ heroRightImage }}); opacity: {{ heroOpacity }};"
+    ></div>
+  </div>
+
+  {# Gradient overlay for better text readability #}
+  <div class="from-background/50 via-background/80 to-background absolute inset-0 bg-gradient-to-b"></div>
+
+  <div class="relative z-10 container mx-auto max-w-6xl">
+    <div class="space-y-6 text-center">
+      <h1 class="text-5xl font-bold tracking-tight text-balance md:text-7xl">
+        YOUR WEEKLY GUIDE TO
+        <br />
+        <span class="text-primary">
+          {{ siteSettings.herotext or 'LOCAL EVENTS' }}
+        </span>
+      </h1>
+      <p class="text-muted-foreground mx-auto max-w-2xl text-xl text-balance md:text-2xl">
+        Discover the best live music, food festivals, art shows, and
+        community gatherings happening every week.
+      </p>
+
+      {# Newsletter Signup #}
+      <div id="newsletter-signup" class="mx-auto max-w-xl pt-8">
+        {% newsletterSignup "compact" %}
+        <p class="text-muted-foreground mt-3 text-sm">
+          Join {{ siteSettings.subscribercount or '5,000+' }} {{ siteSettings.subscribercounttext or 'locals getting weekly event updates' }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Features Section #}
+<section class="border-border border-t px-4 py-16">
+  <div class="container mx-auto max-w-6xl">
+    <div class="grid gap-8 md:grid-cols-3">
+      <div class="border-border bg-card rounded-lg border p-6">
+        <svg class="text-primary mb-4 h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="text-card-foreground mb-2 text-xl font-bold">
+          Curated Weekly
+        </h3>
+        <p class="text-muted-foreground">
+          Hand-picked events delivered every Monday morning so you never
+          miss out on the best happenings.
+        </p>
+      </div>
+
+      <div class="border-border bg-card rounded-lg border p-6">
+        <svg class="text-primary mb-4 h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <h3 class="text-card-foreground mb-2 text-xl font-bold">
+          Hyper Local
+        </h3>
+        <p class="text-muted-foreground">
+          We cover all neighborhoods and communities across the city, from
+          downtown to the suburbs.
+        </p>
+      </div>
+
+      <div class="border-border bg-card rounded-lg border p-6">
+        <svg class="text-primary mb-4 h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+        <h3 class="text-card-foreground mb-2 text-xl font-bold">
+          Zero Spam
+        </h3>
+        <p class="text-muted-foreground">
+          Just one email per week with quality content. Unsubscribe
+          anytime, no hard feelings.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Latest Updates Section #}
+<section class="px-4 py-16">
+  <div class="container mx-auto max-w-6xl">
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="text-foreground text-3xl font-bold md:text-4xl">
+        LATEST UPDATES
+      </h2>
+
+      <a href="/updates" class="inline-flex h-10 items-center justify-center rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+        View All
+        <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+
+    {# Use postGrid shortcode #}
+    {% postGrid true, 3 %}
+  </div>
+</section>
+
+{# CTA Section #}
+<section class="border-border border-t px-4 py-20">
+  <div class="container mx-auto max-w-4xl text-center">
+    <h2 class="text-foreground mb-6 text-4xl font-bold text-balance md:text-5xl">
+      NEVER MISS AN EVENT AGAIN
+    </h2>
+    <p class="text-muted-foreground mb-8 text-xl text-balance">
+      Get the best events delivered to your inbox every Monday
+    </p>
+
+    <div class="mx-auto max-w-xl">
+      {% newsletterSignup "compact" %}
+    </div>
+  </div>
+</section>

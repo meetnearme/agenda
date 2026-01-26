@@ -17,10 +17,6 @@ export const navigationItems: NavItem[] = [
     title: 'Events',
     slug: '/events',
   },
-  {
-    title: 'Template',
-    slug: '/template',
-  },
 ];
 
 /**
@@ -28,8 +24,8 @@ export const navigationItems: NavItem[] = [
  * Actual site description (tagline) now comes from CMS (content/home/index.md)
  */
 export const siteMetadata = {
-  title: 'Local Agenda',
+  title: 'ATX Agenda',
   description: 'Your weekly guide to local events',
-  author: 'Local Agenda Team',
+  author: 'ATX Agenda Team',
 };
 

@@ -1,0 +1,185 @@
+---
+pagination:
+  data: collections.posts
+  size: 1
+  alias: post
+permalink: /updates/{{ post.slug }}/
+---
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {# Page title #}
+  <title>{{ post.data.title }} | {{ siteSettings.sitename or 'Local Agenda' }}</title>
+
+  {# Meta description #}
+  <meta name="description" content="{{ post.data.description or post.excerpt }}">
+
+  {# Open Graph tags #}
+  <meta property="og:title" content="{{ post.data.title }}">
+  <meta property="og:description" content="{{ post.data.description or post.excerpt }}">
+  <meta property="og:type" content="article">
+  {% if post.data.featuredimage %}
+    {% set ogImage = '/' + env.CONTENT_DIR + '/updates/' + post.imageBasePath + '/' + post.data.featuredimage %}
+    <meta property="og:image" content="{{ ogImage }}">
+  {% endif %}
+  <meta property="article:published_time" content="{{ post.data.date }}">
+
+  {# Twitter Card tags #}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ post.data.title }}">
+  <meta name="twitter:description" content="{{ post.data.description or post.excerpt }}">
+  {% if post.data.featuredimage %}
+    <meta name="twitter:image" content="{{ ogImage }}">
+  {% endif %}
+
+  {# Favicon #}
+  <link rel="icon" href="/favicon.ico">
+
+  {# CSS #}
+  <link rel="stylesheet" href="/css/main.css">
+
+  {# Brand color CSS variables #}
+  {% if siteSettings.brandcolor %}
+  <style>
+    :root {
+      --primary: {{ siteSettings.brandcolor }};
+      --accent: {{ siteSettings.brandcolor }};
+      --ring: {{ siteSettings.brandcolor }};
+      --sidebar-primary: {{ siteSettings.brandcolor }};
+      --sidebar-ring: {{ siteSettings.brandcolor }};
+      --chart-1: {{ siteSettings.brandcolor }};
+    }
+  </style>
+  {% endif %}
+</head>
+<body class="bg-background text-foreground min-h-screen">
+
+  {# Header #}
+  {% include "components/header.njk" %}
+
+  {# Main content #}
+  <main class="min-h-screen">
+    <article class="bg-background px-4 py-16">
+      <div class="container mx-auto max-w-4xl">
+        {# Featured Image #}
+        {% if post.data.featuredimage %}
+          {% set featuredImagePath = '/' + env.CONTENT_DIR + '/updates/' + post.imageBasePath + '/' + post.data.featuredimage %}
+          <div class="mb-8 overflow-hidden rounded-lg">
+            <img
+              src="{{ featuredImagePath }}"
+              alt="{{ post.data.title }}"
+              class="h-auto w-full object-cover"
+            />
+          </div>
+        {% endif %}
+
+        {# Article Header #}
+        <header class="mb-8">
+          <div class="text-primary mb-4 flex items-center gap-4 text-sm font-semibold">
+            <time datetime="{{ post.data.date }}">
+              {{ post.data.date | formatDate }}
+            </time>
+            {% if post.readingTime %}
+              <span class="text-muted-foreground">•</span>
+              <span class="text-muted-foreground">{{ post.readingTime }} min read</span>
+            {% endif %}
+          </div>
+
+          <h1 class="text-foreground mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+            {{ post.data.title }}
+          </h1>
+
+          {% if post.data.description %}
+            <p class="text-muted-foreground text-xl">
+              {{ post.data.description }}
+            </p>
+          {% endif %}
+        </header>
+
+        {# Article Content #}
+        <div class="prose prose-lg prose-invert mx-auto">
+          {{ post.content | renderMarkdown | safe }}
+        </div>
+
+        {# Tags (if needed) #}
+        {% if post.data.tags and post.data.tags.length > 0 %}
+          <div class="mt-12 flex flex-wrap gap-2">
+            {% for tag in post.data.tags %}
+              <span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium">
+                {{ tag }}
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </article>
+
+    {# Adjacent Post Navigation #}
+    {% set allPosts = collections.posts %}
+    {% set currentIndex = -1 %}
+    {% for p in allPosts %}
+      {% if p.slug === post.slug %}
+        {% set currentIndex = loop.index0 %}
+      {% endif %}
+    {% endfor %}
+
+    {% if currentIndex >= 0 %}
+      {% set previousPost = allPosts[currentIndex - 1] if currentIndex > 0 else null %}
+      {% set nextPost = allPosts[currentIndex + 1] if currentIndex < allPosts.length - 1 else null %}
+
+      {% if previousPost or nextPost %}
+        <nav class="border-border border-t px-4 py-12">
+          <div class="container mx-auto max-w-4xl">
+            <div class="grid gap-8 md:grid-cols-2">
+              {# Previous Post #}
+              {% if previousPost %}
+                <a href="{{ previousPost.url }}" class="group block">
+                  <div class="text-muted-foreground mb-2 text-sm font-semibold">
+                    ← Previous Post
+                  </div>
+                  <h3 class="text-foreground group-hover:text-primary text-lg font-bold transition-colors">
+                    {{ previousPost.data.title }}
+                  </h3>
+                </a>
+              {% else %}
+                <div></div>
+              {% endif %}
+
+              {# Next Post #}
+              {% if nextPost %}
+                <a href="{{ nextPost.url }}" class="group block text-right">
+                  <div class="text-muted-foreground mb-2 text-sm font-semibold">
+                    Next Post →
+                  </div>
+                  <h3 class="text-foreground group-hover:text-primary text-lg font-bold transition-colors">
+                    {{ nextPost.data.title }}
+                  </h3>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+      {% endif %}
+    {% endif %}
+
+    {# Related Posts Section #}
+    <section class="border-border border-t px-4 py-16">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="text-foreground mb-8 text-2xl font-bold">MORE UPDATES</h2>
+        {% postGrid false, 3, post.slug %}
+      </div>
+    </section>
+  </main>
+
+  {# Footer #}
+  {% include "components/footer.njk" %}
+
+  {# Client-side JavaScript #}
+  <script src="/js/main.js" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</body>
+</html>
