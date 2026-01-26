@@ -21,7 +21,7 @@ collections:
     label: ⚙️ Site Settings
     description: Configure your site name, branding, and newsletter settings
     files:
-      - file: content/settings/index.md
+      - file: config/atx-agenda-content/settings/index.md
         label: Branding & Settings
         name: settings
         editor:
@@ -56,15 +56,16 @@ collections:
                 hint: Image shown on the right side of the hero background
                 media_folder: /public/content/home
                 public_folder: /content/home
-              - label: Image Opacity
+              - label: Background Visibility
                 name: opacity
-                widget: number
-                default: 0.2
-                min: 0.1
-                max: 1.0
-                step: 0.1
-                value_type: float
-                hint: Opacity of background images (0.1 = very faint, 1.0 = full)
+                widget: select
+                default: 0.5
+                options:
+                  - { label: 'Subtle (0.3) - Faint background with dark overlay', value: 0.3 }
+                  - { label: 'Balanced (0.5) - Moderate visibility (Recommended)', value: 0.5 }
+                  - { label: 'Prominent (0.7) - Clear background images', value: 0.7 }
+                  - { label: 'Bold (0.9) - Very visible, minimal overlay', value: 0.9 }
+                hint: Controls how visible the background images are. Higher values = brighter images and lighter overlay.
           - label: Tagline
             name: tagline
             widget: string
@@ -264,7 +265,7 @@ collections:
   - name: home
     label: Home
     files:
-      - file: content/home/index.md
+      - file: config/atx-agenda-content/home/index.md
         label: Home Page
         name: home
         editor:

@@ -363,6 +363,36 @@
 - Newsletter subscription function works with 11ty
 - All deployment configurations verified and ready
 
+### ✅ Task 16h: Fix hero background opacity to be CMS-controllable
+- [x] Identify issue: Tailwind classes can't be dynamically interpolated
+- [x] Replace Tailwind utility classes with inline CSS gradient
+- [x] Calculate gradient opacity inversely from heroOpacity setting
+- [x] Replace continuous opacity slider with discrete select options
+- [x] Add 4 meaningful preset levels (Subtle, Balanced, Prominent, Bold)
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `src/pages/index.njk` (replaced Tailwind classes with inline gradient styles)
+- `public/admin/config.yml` (changed slider to select dropdown)
+
+**Issue:**
+- Tailwind CSS requires literal class names at build time
+- Template variables in class names don't work: `class="from-background/{{ opacity }}"`
+- Original slider gave too many values with similar visual results
+
+**Solution:**
+- Use inline CSS with Nunjucks-calculated rgba values
+- Gradient darkness inversely calculated from image opacity
+- Replace slider with select dropdown offering 4 preset levels
+- Each level produces visually distinct results
+
+**Impact:**
+- Hero background visibility now fully controllable via CMS
+- Clear, meaningful choices instead of confusing continuous slider
+- Single setting controls both image opacity and gradient darkness
+- Changes apply immediately without Tailwind rebuild
+
 ### ✅ Task 16g: Fix home page showing only 2 posts instead of 3
 - [x] Identify postGrid shortcode filtering for featured posts only
 - [x] Change home page to show recent posts instead of featured posts
