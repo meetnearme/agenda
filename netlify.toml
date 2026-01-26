@@ -4,7 +4,7 @@
   # - SITE_CONFIG=marketing   → Marketing site (keeps template)
   # - (not set)               → Customer fork (removes template, keeps defaults)
   command = "pnpm build:ci"
-  publish = "out"
+  publish = "_site"
 
 [build.environment]
   NODE_VERSION = "20"

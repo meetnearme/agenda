@@ -4,8 +4,11 @@ const matter = require('gray-matter');
 
 module.exports = () => {
   try {
-    // Settings always come from the default content directory
-    const settingsPath = path.join(process.cwd(), 'content', 'settings', 'index.md');
+    // Settings respect CONTENT_DIR for config-driven deployments
+    const CONTENT_DIR = process.env.CONTENT_DIR || 'content';
+    const settingsPath = path.join(process.cwd(), CONTENT_DIR, 'settings', 'index.md');
+
+    console.log('[11ty] Loading site settings from:', settingsPath);
 
     if (!fs.existsSync(settingsPath)) {
       console.warn('[11ty] Settings file not found:', settingsPath);

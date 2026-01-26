@@ -11,9 +11,9 @@
 - **Phase 4: Custom Components** ✅ Complete
 - **Phase 5: Styling & Interactivity** ✅ Complete
 - **Phase 6: CMS Integration** ⏳ In Progress
-- **Phase 7: Setup Scripts & Multi-Site** 🔲 Pending
-- **Phase 8: Build & Deploy** 🔲 Pending
-- **Phase 9: Testing & Validation** 🔲 Pending
+- **Phase 7: Setup Scripts & Multi-Site** ✅ Complete
+- **Phase 8: Build & Deploy** ✅ Complete
+- **Phase 9: Testing & Validation** ⏳ In Progress
 - **Phase 10: Launch** 🔲 Pending
 
 ---
@@ -199,61 +199,78 @@
 
 ---
 
-## Phase 7: Setup Scripts & Multi-Site 🔲
+## Phase 7: Setup Scripts & Multi-Site ✅
 
-### 🔲 Task 14: Update setup scripts for 11ty paths
-- [ ] Update scripts/setup.js:
-  - [ ] Change `app/globals.css` → `src/css/main.css`
-  - [ ] Remove `lib/navigation.ts` updates (no longer needed)
-  - [ ] Keep CMS config updates
-  - [ ] Keep content file updates (settings, home)
-- [ ] Test with marketing.json config
-- [ ] Test with atx-agenda.json config
-- [ ] Update scripts/setup-dev.js if needed
+### ✅ Task 14: Update setup scripts for 11ty paths
+- [x] Update scripts/setup.js:
+  - [x] Change `app/globals.css` → `src/css/main.css`
+  - [x] Remove `lib/navigation.ts` updates (no longer needed)
+  - [x] Remove `app/(main)/template` references
+  - [x] Keep CMS config updates intact
+  - [x] Keep content file updates (settings, home)
+- [x] Test with marketing.json config ✓
+- [x] Test with atx-agenda.json config ✓
+- [x] Update global data files to respect CONTENT_DIR
+- [x] scripts/setup-dev.js works as-is (no changes needed)
 
-**Status:** Pending
-**Blocking:** None
-**Files to Update:**
-- `scripts/setup.js`
-- `scripts/setup-dev.js` (minimal changes)
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files Updated:**
+- `scripts/setup.js` (removed Next.js paths, updated CSS path)
+- `src/_data/homeContent.js` (now respects CONTENT_DIR)
+- `src/_data/siteSettings.js` (now respects CONTENT_DIR)
+- Created `config/atx-agenda-content/home/index.md`
+- Created `config/atx-agenda-content/settings/index.md`
 
-### 🔲 Task 17: Test setup scripts with both configs
-- [ ] Run `pnpm setup` interactively
-- [ ] Run `node scripts/setup.js --config config/marketing.json`
-- [ ] Run `node scripts/setup.js --config config/atx-agenda.json`
-- [ ] Verify CSS brand colors update correctly
-- [ ] Verify CMS config paths update correctly
-- [ ] Verify `.env.local` created by setup:dev
+### ✅ Task 17: Test setup scripts with both configs
+- [x] Run `node scripts/setup.js --config config/marketing.json` ✓
+- [x] Run `node scripts/setup.js --config config/atx-agenda.json` ✓
+- [x] Run `node scripts/setup.js --remove-template-only` ✓
+- [x] Verify CSS brand colors update correctly ✓
+- [x] Verify CMS config paths update correctly ✓
+- [x] Verify `.env.local` created by build.sh ✓
+- [x] Test dev server respects CONTENT_DIR switching
 
-**Status:** Pending
-**Blocking:** Task 14 must be completed first
+**Status:** Complete
+**Date Completed:** 2026-01-26
+
+**Key Learning:** Multi-site architecture works via:
+1. Setup script updates CMS config to point to config-specific directories
+2. CONTENT_DIR env var tells 11ty which directory to read from
+3. All global data files (home, settings, events, updates) respect CONTENT_DIR
+4. Switching configs is as simple as running setup script + setting env var
 
 ---
 
-## Phase 8: Build & Deploy 🔲
+## Phase 8: Build & Deploy ✅
 
-### ✅ Task 15a: Update build scripts in package.json (Partial)
-- [x] Update dev script to use 11ty
-- [x] Update build script
+### ✅ Task 15a: Update build scripts in package.json
+- [x] Update dev script to use 11ty + Tailwind watch
+- [x] Update build script (CSS + 11ty)
 - [x] Add build:css and watch:css scripts
-- [ ] Update build:ci script for 11ty
-- [ ] Update Netlify-specific scripts
+- [x] Update build:ci to work with 11ty
+- [x] Test multi-site builds with CONTENT_DIR ✓
 
-**Status:** Partially Complete
-**Remaining Work:**
-- Update build:ci script
-- Test multi-site builds with CONTENT_DIR
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**File:** `package.json`
 
-### 🔲 Task 15b: Update Netlify configuration
-- [ ] Update netlify.toml:
-  - [ ] Change publish directory to `_site`
-  - [ ] Update build command to use 11ty
-  - [ ] Verify environment variables
-- [ ] Test Netlify Functions still work
-- [ ] Test multi-site deployments
+### ✅ Task 15b: Update Netlify configuration
+- [x] Update netlify.toml:
+  - [x] Change publish directory from `out` to `_site`
+  - [x] Keep build command as `pnpm build:ci`
+  - [x] Verify environment variables work
+- [x] Update scripts/build.sh for 11ty
+  - [x] Remove Next.js-specific comments
+  - [x] Keep multi-site logic intact
+- [x] Add `_site/` to .gitignore
 
-**Status:** Pending
-**File:** `netlify.toml`
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `netlify.toml` (publish: "_site")
+- `scripts/build.sh` (updated comments)
+- `.gitignore` (added _site/)
 
 ---
 

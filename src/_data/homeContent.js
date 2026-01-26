@@ -4,8 +4,11 @@ const matter = require('gray-matter');
 
 module.exports = () => {
   try {
-    // Home content always comes from the default content directory
-    const homePath = path.join(process.cwd(), 'content', 'home', 'index.md');
+    // Home content respects CONTENT_DIR for config-driven deployments
+    const CONTENT_DIR = process.env.CONTENT_DIR || 'content';
+    const homePath = path.join(process.cwd(), CONTENT_DIR, 'home', 'index.md');
+
+    console.log('[11ty] Loading home content from:', homePath);
 
     if (!fs.existsSync(homePath)) {
       console.warn('[11ty] Home content file not found:', homePath);

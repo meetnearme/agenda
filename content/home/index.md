@@ -1,6 +1,6 @@
 ---
 templatekey: index-page
-title: ATX Agenda
+title: Local Agenda
 navigation:
   - title: Home
     slug: /
@@ -8,7 +8,7 @@ navigation:
     slug: /updates
   - title: Events
     slug: /events
-tagline: Your Weekly Guide to Austin Events
+tagline: Your Weekly Guide to Local Events
 homequote: Discover the best live music, food festivals, art shows, and community gatherings happening every week. We curate the best events so you never miss out.
 featuredimage: null
 footerbioimage: null
