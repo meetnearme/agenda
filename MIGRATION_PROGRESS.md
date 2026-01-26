@@ -288,6 +288,26 @@
 **Date Completed:** 2026-01-26
 **Dev Server:** http://localhost:3000/
 
+### ✅ Task 16b: Fix performance bottleneck and security issues
+- [x] Strip script tags from Beehiiv embed at build time
+- [x] Load Beehiiv script once in base layout (instead of per embed)
+- [x] Remove eval() security risk from main.js
+- [x] Fix duplicate watch targets in .eleventy.js
+- [x] Add JS/admin passthrough copies for static assets
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files Updated:**
+- `.eleventy.js` (added script tag stripping, fixed watch targets, added passthrough)
+- `scripts/setup.js` (strip script tags from Beehiiv embeds)
+- `src/_includes/layouts/base.njk` (load Beehiiv script once globally)
+- `src/js/main.js` (removed eval() calls, simplified embed handling)
+
+**Impact:**
+- Improved build performance by eliminating duplicate script loading
+- Enhanced security by removing eval() and centralizing script execution
+- Better asset handling with proper passthrough configuration
+
 ### 🔲 Task 18: Test CMS integration and editorial workflow
 - [ ] Access /admin interface
 - [ ] Log in with Netlify Identity
@@ -348,6 +368,9 @@
 3. **Architecture:** Simplified from React/Next.js to static 11ty
 4. **Styling:** Migrated to DaisyUI (simpler than shadcn/ui)
 5. **All Core Pages Working:** Home, Updates, Events, Individual Posts
+6. **Multi-Site Architecture:** Working correctly with CONTENT_DIR switching
+7. **Performance:** Eliminated duplicate script loading and eval() security risks
+8. **Build Configuration:** Fixed watch targets and asset passthrough
 
 ---
 
@@ -385,4 +408,9 @@
 
 ---
 
-**Last Updated:** 2026-01-26
+**Last Updated:** 2026-01-26 (14:00)
+
+**Recent Commits:**
+- `9f6773f` perf: Fix performance bottleneck and security issues
+- `a8e9c0f` feat: Fix multi-site architecture for 11ty
+- `ba7da5e` refactor: Update setup script for 11ty
