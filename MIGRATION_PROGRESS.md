@@ -363,6 +363,33 @@
 - Newsletter subscription function works with 11ty
 - All deployment configurations verified and ready
 
+### ✅ Task 16f: Fix Netlify Next.js plugin conflict
+- [x] Identify Next.js plugin auto-detection issue
+- [x] Document removal steps in netlify.toml
+- [x] Verify build completes successfully before plugin error
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `netlify.toml` (added migration note and instructions)
+
+**Issue:**
+- Netlify auto-detected Next.js (because `next` package still in package.json)
+- `@netlify/plugin-nextjs` plugin ran after successful 11ty build
+- Plugin failed looking for `.next` directory that no longer exists
+
+**Solution:**
+- Remove `@netlify/plugin-nextjs` from Netlify site settings:
+  - Go to **Site settings** → **Build & deploy** → **Build plugins**
+  - Remove or disable the Next.js plugin
+  - Redeploy with cache cleared
+- The actual build succeeds; only the plugin fails
+
+**Impact:**
+- Netlify deployments will work once plugin is removed
+- Build output shows 6 pages generated successfully
+- All 18 static files copied correctly
+
 ### 🔲 Task 18: Test CMS integration and editorial workflow
 - [ ] Access /admin interface
 - [ ] Log in with Netlify Identity

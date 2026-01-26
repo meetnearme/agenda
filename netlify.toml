@@ -1,3 +1,7 @@
+# Eleventy (11ty) Static Site Configuration
+# Note: This project has been migrated from Next.js to 11ty
+# If you see Next.js plugin errors, remove @netlify/plugin-nextjs from Build Plugins in Netlify UI
+
 [build]
   # Uses SITE_CONFIG env var to determine which config to use:
   # - SITE_CONFIG=atx-agenda  → ATX Agenda site (removes template)
