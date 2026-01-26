@@ -15,7 +15,10 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/static": "/" });
   eleventyConfig.addPassthroughCopy({ "src/js": "/js" });
   eleventyConfig.addPassthroughCopy({ "public/admin": "/admin" });
-  eleventyConfig.addPassthroughCopy({ "content": "/content" });
+  eleventyConfig.addPassthroughCopy({ "public/content": "/content" }); // Images and media
+  eleventyConfig.addPassthroughCopy({ "public/img": "/img" }); // CMS media uploads
+  eleventyConfig.addPassthroughCopy({ "public/_headers": "/_headers" }); // Netlify headers
+  eleventyConfig.addPassthroughCopy({ "content": "/content" }); // Markdown content (may overlap, but needed for any non-image files)
   eleventyConfig.addPassthroughCopy({ [CONTENT_DIR]: `/${CONTENT_DIR}` });
 
   // Watch targets

@@ -308,6 +308,61 @@
 - Enhanced security by removing eval() and centralizing script execution
 - Better asset handling with proper passthrough configuration
 
+### ✅ Task 16c: Fix hero images not displaying
+- [x] Add `public/content` passthrough copy for images and media
+- [x] Add `public/img` passthrough copy for CMS uploads
+- [x] Add `public/_headers` passthrough copy for Netlify
+- [x] Verify hero images render correctly with CMS-configured opacity
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**File:** `.eleventy.js` (lines 14-22)
+
+**Impact:**
+- Hero background images now display correctly on homepage
+- CMS-uploaded media will be properly copied to build output
+- Netlify headers file included in deployment
+
+### ✅ Task 16d: Fix dev server not loading CONTENT_DIR from .env.local
+- [x] Install `dotenv-cli` package
+- [x] Update `dev` script to load .env.local before running
+- [x] Update `dev:eleventy` script to load .env.local
+- [x] Update `build` script to load .env.local for consistency
+- [x] Verify CONTENT_DIR environment variable is read correctly
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `package.json` (added dotenv-cli, updated dev & build scripts)
+
+**Impact:**
+- Dev server now correctly loads from `config/atx-agenda-content` after running `pnpm setup:dev`
+- Multi-site content switching works properly in development
+- No manual environment variable setting needed
+
+### ✅ Task 16e: Verify Netlify deployment configuration for 11ty
+- [x] Verify `netlify.toml` publish directory is `_site`
+- [x] Verify build command uses `pnpm build:ci`
+- [x] Verify functions directory configuration
+- [x] Verify Decap CMS redirects are in place
+- [x] Verify `scripts/build.sh` works with 11ty
+- [x] Verify Netlify Function (`subscribe.ts`) is framework-agnostic
+- [x] Verify `public/_headers` is copied to build output
+
+**Status:** Complete
+**Date Completed:** 2026-01-26
+**Files:**
+- `netlify.toml` (already correct for 11ty)
+- `scripts/build.sh` (creates .env.local, exports CONTENT_DIR)
+- `netlify/functions/subscribe.ts` (framework-agnostic, works as-is)
+- `.eleventy.js` (includes _headers passthrough)
+
+**Impact:**
+- Netlify deployments will work correctly with 11ty
+- Multi-site builds work via SITE_CONFIG environment variable
+- Newsletter subscription function works with 11ty
+- All deployment configurations verified and ready
+
 ### 🔲 Task 18: Test CMS integration and editorial workflow
 - [ ] Access /admin interface
 - [ ] Log in with Netlify Identity
