@@ -4,7 +4,7 @@ A free, open-source template for creating hyper-local community newsletters. Bui
 
 <!-- Netlify Status Badge -->
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/atxagenda/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a6d8aaf6-6c2f-43c5-82a2-a1a050e4f1bc/deploy-status)](https://app.netlify.com/projects/atxagenda/deploys)
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/local-newsletter)
 
@@ -237,17 +237,17 @@ This template was migrated from Next.js to Eleventy for several key reasons:
 
 ## Scripts
 
-| Command              | Description                                       |
-| -------------------- | ------------------------------------------------- |
-| `pnpm setup`         | **Run first** - Customize for your newsletter     |
-| `pnpm setup:dev`     | Setup with ATX Agenda config (localhost embed)    |
-| `pnpm dev:all`       | **Recommended** - Start 11ty + CMS proxy together |
-| `pnpm dev`           | Start 11ty development server only                |
-| `pnpm dev:cms`       | Start Decap CMS local proxy only                  |
-| `pnpm build`         | Build for production (generates `_site/`)         |
-| `pnpm build:ci`      | Build for Netlify CI/CD                           |
-| `pnpm build:atx-agenda` | Build with ATX Agenda config                   |
-| `pnpm build:marketing`  | Build with Marketing config                    |
+| Command                 | Description                                       |
+| ----------------------- | ------------------------------------------------- |
+| `pnpm setup`            | **Run first** - Customize for your newsletter     |
+| `pnpm setup:dev`        | Setup with ATX Agenda config (localhost embed)    |
+| `pnpm dev:all`          | **Recommended** - Start 11ty + CMS proxy together |
+| `pnpm dev`              | Start 11ty development server only                |
+| `pnpm dev:cms`          | Start Decap CMS local proxy only                  |
+| `pnpm build`            | Build for production (generates `_site/`)         |
+| `pnpm build:ci`         | Build for Netlify CI/CD                           |
+| `pnpm build:atx-agenda` | Build with ATX Agenda config                      |
+| `pnpm build:marketing`  | Build with Marketing config                       |
 
 ## Contributing
 
