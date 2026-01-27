@@ -3,11 +3,30 @@
  * Handles interactivity for the 11ty site
  */
 
-// Mobile menu toggle (if not using Alpine.js)
-// Note: We're using Alpine.js in the header, so this is a fallback
-
-// Newsletter form submission (native mode)
+// Mobile menu toggle (vanilla JS)
 document.addEventListener('DOMContentLoaded', () => {
+  const menuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIconOpen = document.getElementById('menu-icon-open');
+  const menuIconClose = document.getElementById('menu-icon-close');
+
+  if (menuButton && mobileMenu && menuIconOpen && menuIconClose) {
+    menuButton.addEventListener('click', () => {
+      const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+
+      // Toggle menu visibility
+      mobileMenu.classList.toggle('hidden');
+
+      // Toggle icons
+      menuIconOpen.classList.toggle('hidden');
+      menuIconClose.classList.toggle('hidden');
+
+      // Update aria-expanded for accessibility
+      menuButton.setAttribute('aria-expanded', !isExpanded);
+    });
+  }
+
+  // Newsletter form submission (native mode)
   // Handle all newsletter forms on the page
   const newsletterForms = document.querySelectorAll('.newsletter-form');
 

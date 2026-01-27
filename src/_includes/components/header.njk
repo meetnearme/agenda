@@ -46,22 +46,22 @@
 
       {# Mobile Menu Button #}
       <button
+        id="mobile-menu-button"
         class="md:hidden"
-        x-data="{ open: false }"
-        @click="open = !open"
         aria-label="Toggle menu"
+        aria-expanded="false"
       >
-        <svg x-show="!open" class="h-6 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg id="menu-icon-open" class="h-6 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <svg x-show="open" class="h-6 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+        <svg id="menu-icon-close" class="h-6 w-6 text-foreground hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
 
     {# Mobile Navigation #}
-    <nav class="hidden border-t border-border pb-4 pt-4 md:hidden" x-data="{ mobileMenuOpen: false }" x-show="mobileMenuOpen">
+    <nav id="mobile-menu" class="hidden border-t border-border pb-4 pt-4 md:hidden">
       <div class="flex flex-col gap-4">
         {% if homeContent.navigation %}
           {% for item in homeContent.navigation %}
