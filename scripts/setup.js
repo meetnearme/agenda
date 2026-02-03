@@ -301,7 +301,12 @@ function applyConfiguration(config, configFilePath = null) {
     // Update Site Settings (content/settings/index.md)
     // Data-driven approach: map JSON config keys to YAML keys and update if they exist
     console.log('📄 Updating site settings...');
-    const settingsPath = path.join(ROOT_DIR, 'content/settings/index.md');
+    const settingsBaseDir = contentDir || 'content';
+    const settingsPath = path.join(
+        ROOT_DIR,
+        settingsBaseDir,
+        'settings/index.md'
+    );
 
     const fileContents = fs.readFileSync(settingsPath, 'utf8');
     const { data, content: bodyContent } = matter(fileContents);
@@ -355,9 +360,17 @@ function applyConfiguration(config, configFilePath = null) {
         });
     }
 
-    // Always update these defaults (not from config, but required)
-    data.subscribercount = '';
-    data.subscribercounttext = 'subscribers getting weekly updates';
+    // Only set defaults if missing to avoid overwriting site-specific content
+    if (data.subscribercount === undefined || data.subscribercount === null) {
+        data.subscribercount = '';
+    }
+    if (
+        data.subscribercounttext === undefined ||
+        data.subscribercounttext === null ||
+        data.subscribercounttext === ''
+    ) {
+        data.subscribercounttext = 'subscribers getting weekly updates';
+    }
 
     // Stringify back to YAML and reconstruct the file
     const yamlContent = yaml.dump(data, {
@@ -374,7 +387,8 @@ function applyConfiguration(config, configFilePath = null) {
     // Update Home Content (content/home/index.md)
     // Data-driven approach: map JSON config keys to YAML keys
     console.log('📄 Updating home content...');
-    const homePath = path.join(ROOT_DIR, 'content/home/index.md');
+    const homeBaseDir = contentDir || 'content';
+    const homePath = path.join(ROOT_DIR, homeBaseDir, 'home/index.md');
 
     const homeFileContents = fs.readFileSync(homePath, 'utf8');
     const { data: homeData, content: homeBodyContent } =
@@ -398,9 +412,15 @@ function applyConfiguration(config, configFilePath = null) {
         }
     });
 
-    // Always update footerbiotext default
-    homeData.footerbiotext =
-        'Your weekly guide to local events and community happenings.';
+    // Only set footerbiotext default if missing to avoid overwriting custom copy
+    if (
+        homeData.footerbiotext === undefined ||
+        homeData.footerbiotext === null ||
+        homeData.footerbiotext === ''
+    ) {
+        homeData.footerbiotext =
+            'Your weekly guide to local events and community happenings.';
+    }
 
     // Stringify back to YAML and reconstruct the file
     const homeYamlContent = yaml.dump(homeData, {

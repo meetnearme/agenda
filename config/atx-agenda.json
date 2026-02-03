@@ -18,5 +18,5 @@
     },
     "eventsEmbed": "<div id=\"mnm-embed-container\"></div>\n<script src=\"https://static.meetnear.me/static/assets/embed.js\" data-event-owners=\"\" data-user-id=\"350373621882956150\"></script>",
     "removeTemplate": true,
-    "contentDir": "config/atx-agenda-content"
+    "contentDir": "content-atx-agenda"
 }
