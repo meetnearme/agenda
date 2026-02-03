@@ -14,6 +14,8 @@
   /* Lime green accent - primary CTA color */
   --primary: oklch(0.85 0.21 129); /* Bright lime green */
   --primary-foreground: oklch(0.12 0 0); /* Dark text on lime */
+  /* Derived from --primary for better contrast in light mode */
+  --primary-adaptive: color-mix(in oklab, var(--primary) 78%, black);
 
   --secondary: oklch(0.94 0 0);
   --secondary-foreground: oklch(0.2 0 0);
@@ -53,6 +55,8 @@
   /* Lime green accent - primary CTA color */
   --primary: oklch(0.85 0.21 129); /* Bright lime green */
   --primary-foreground: oklch(0.12 0 0); /* Dark text on lime */
+  /* Derived from --primary for better contrast in dark mode */
+  --primary-adaptive: color-mix(in oklab, var(--primary) 78%, white);
 
   --secondary: oklch(0.25 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -94,6 +98,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-adaptive: var(--primary-adaptive);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
