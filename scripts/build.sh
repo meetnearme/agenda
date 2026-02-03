@@ -31,6 +31,13 @@ elif [ "$SITE_CONFIG" = "santa-fe-agenda" ]; then
   # Extract contentDir from config for 11ty build
   CONTENT_DIR=$(node -e "console.log(require('./config/santa-fe-agenda.json').contentDir || 'content')")
   THEME=$(node -e "console.log(require('./config/santa-fe-agenda.json').theme || 'dark')")
+elif [ "$SITE_CONFIG" = "plano-moms" ]; then
+  echo "Building Plano Moms site..."
+  echo "Using config: config/plano-moms.json"
+  node scripts/setup.js --config config/plano-moms.json
+  # Extract contentDir from config for 11ty build
+  CONTENT_DIR=$(node -e "console.log(require('./config/plano-moms.json').contentDir || 'content')")
+  THEME=$(node -e "console.log(require('./config/plano-moms.json').theme || 'dark')")
 else
   echo "Building customer fork (removing template only)..."
   echo "No SITE_CONFIG env var set - using defaults"

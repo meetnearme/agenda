@@ -19,6 +19,7 @@
         "build:atx-agenda": "SITE_CONFIG=atx-agenda pnpm build:ci",
         "build:marketing": "SITE_CONFIG=marketing pnpm build:ci",
         "build:santa-fe-agenda": "SITE_CONFIG=santa-fe-agenda pnpm build:ci",
+        "build:plano-moms": "SITE_CONFIG=plano-moms pnpm build:ci",
         "build:fork": "pnpm build:ci",
         "start": "eleventy --serve",
         "lint": "echo 'Linting not configured for 11ty yet'"

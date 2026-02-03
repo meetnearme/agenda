@@ -21,7 +21,7 @@ collections:
     label: ⚙️ Site Settings
     description: Configure your site name, branding, and newsletter settings
     files:
-      - file: content/settings/index.md
+      - file: content-plano-moms/settings/index.md
         label: Branding & Settings
         name: settings
         editor:
@@ -165,7 +165,7 @@ collections:
 
   - name: updates
     label: Updates
-    folder: content/updates
+    folder: content-plano-moms/updates
     create: true
     slug: index
     media_folder: /public/content/updates/{{year}}/{{month}}/{{title}}
@@ -230,7 +230,7 @@ collections:
   - name: events
     label: Events
     files:
-      - file: content/events/index.md
+      - file: content-plano-moms/events/index.md
         label: Events Page
         name: events
         editor:
@@ -273,7 +273,7 @@ collections:
   - name: home
     label: Home
     files:
-      - file: content/home/index.md
+      - file: content-plano-moms/home/index.md
         label: Home Page
         name: home
         editor:

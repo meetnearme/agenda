@@ -21,7 +21,8 @@ const SITE_CONFIG = process.env.SITE_CONFIG || 'atx-agenda';
 const CONFIG_MAP = {
     'atx-agenda': 'config/atx-agenda.json',
     marketing: 'config/marketing.json',
-    'santa-fe-agenda': 'config/santa-fe-agenda.json'
+    'santa-fe-agenda': 'config/santa-fe-agenda.json',
+    'plano-moms': 'config/plano-moms.json'
 };
 const CONFIG_PATH = path.join(
     ROOT_DIR,

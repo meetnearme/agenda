@@ -1,0 +1,17 @@
+{
+    "orgName": "Plano Moms",
+    "tagline": "Your Weekly Guide to Plano Events",
+    "heroText": "PLANO MOMS",
+    "eventsTitle": "Explore Plano Family Events",
+    "description": "Discover the best local events in Plano every week. Subscribe to Plano Moms for curated weekly event guides delivered to your inbox.",
+    "brandColor": "#a3e635",
+    "theme": "light",
+    "beehiiv": {
+        "mode": "iframe",
+        "embedCode": "<script async src=\"https://subscribe-forms.beehiiv.com/embed.js\"></script><iframe src=\"https://subscribe-forms.beehiiv.com/a21b8d9d-44b0-43ef-9b7f-5477ddf23aeb\" class=\"beehiiv-embed\" data-test-id=\"beehiiv-embed\" frameborder=\"0\" scrolling=\"no\" style=\"width: 613px; height: 339px; margin: 0; border-radius: 0px 0px 0px 0px !important; background-color: transparent; box-shadow: 0 0 #0000; max-width: 100%;\"></iframe>",
+        "subscribeUrl": "https://atxagenda.beehiiv.com/subscribe"
+    },
+    "eventsEmbed": "<div id=\"mnm-embed-container\"></div>\n<script src=\"https://static.devnear.me/static/assets/embed.js\" data-event-owners=\"\" data-user-id=\"357838159616153885\"></script>",
+    "removeTemplate": true,
+    "contentDir": "content-plano-moms"
+}

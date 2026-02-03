@@ -7,6 +7,7 @@
   # - SITE_CONFIG=atx-agenda  → ATX Agenda site (removes template)
   # - SITE_CONFIG=marketing   → Marketing site (keeps template)
   # - SITE_CONFIG=santa-fe-agenda → Santa Fe Agenda site (light theme)
+  # - SITE_CONFIG=plano-moms → Plano Moms site (light theme)
   # - (not set)               → Customer fork (removes template, keeps defaults)
   command = "pnpm build:ci"
   publish = "_site"

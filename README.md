@@ -46,6 +46,7 @@ pnpm dev:all
 
 # Start dev server and CMS proxy after building for target
 SITE_CONFIG=santa-fe-agenda pnpm dev:all
+SITE_CONFIG=plano-moms pnpm dev:all
 ```
 
 Visit `http://localhost:3002` to see your site, and `http://localhost:3002/admin` to access the CMS.
@@ -76,6 +77,7 @@ Set the `SITE_CONFIG` environment variable in your Netlify site settings to cont
 | Production Site | `SITE_CONFIG=atx-agenda`      | Uses `config/atx-agenda.json`, removes template page  |
 | Marketing Site  | `SITE_CONFIG=marketing`       | Uses `config/marketing.json`, keeps template page     |
 | Santa Fe Site   | `SITE_CONFIG=santa-fe-agenda` | Uses `config/santa-fe-agenda.json`, light theme       |
+| Plano Moms Site | `SITE_CONFIG=plano-moms`      | Uses `config/plano-moms.json`, light theme            |
 | Customer Forks  | _(not set)_                   | Removes template, uses defaults for CMS configuration |
 
 ### Configuration Files
@@ -85,6 +87,7 @@ Pre-configured settings are stored in `config/`:
 - `config/atx-agenda.json` - Production site configuration
 - `config/marketing.json` - Marketing/demo site configuration
 - `config/santa-fe-agenda.json` - Santa Fe site configuration (light theme)
+- `config/plano-moms.json` - Plano Moms site configuration (light theme)
 
 ### Local Testing
 
@@ -94,6 +97,9 @@ pnpm build:atx-agenda
 
 # Test Santa Fe Agenda build
 pnpm build:santa-fe-agenda
+
+# Test Plano Moms build
+pnpm build:plano-moms
 
 # Test Marketing build
 pnpm build:marketing
