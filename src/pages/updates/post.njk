@@ -6,7 +6,8 @@ pagination:
 permalink: /updates/{{ post.slug }}/
 ---
 <!DOCTYPE html>
-<html lang="en" class="dark">
+{% set theme = siteSettings.theme or env.THEME or 'dark' %}
+<html lang="en"{% if theme == 'dark' %} class="dark"{% endif %}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +101,7 @@ permalink: /updates/{{ post.slug }}/
         </header>
 
         {# Article Content #}
-        <div class="prose prose-lg prose-invert mx-auto">
+        <div class="prose prose-lg{% if theme == 'dark' %} prose-invert{% endif %} mx-auto">
           {{ post.content | renderMarkdown | safe }}
         </div>
 

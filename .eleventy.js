@@ -7,9 +7,11 @@ module.exports = function (eleventyConfig) {
     // Environment variables
     const CONTENT_DIR = process.env.CONTENT_DIR || 'content';
     const SITE_CONFIG = process.env.SITE_CONFIG;
+    const THEME = process.env.THEME || 'dark';
 
     console.log('[11ty] CONTENT_DIR:', CONTENT_DIR);
     console.log('[11ty] SITE_CONFIG:', SITE_CONFIG);
+    console.log('[11ty] THEME:', THEME);
 
     // Pass-through copies
     eleventyConfig.addPassthroughCopy({ 'src/static': '/' });
@@ -480,7 +482,8 @@ module.exports = function (eleventyConfig) {
     // Global data
     eleventyConfig.addGlobalData('env', {
         CONTENT_DIR,
-        SITE_CONFIG
+        SITE_CONFIG,
+        THEME
     });
 
     return {

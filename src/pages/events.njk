@@ -54,7 +54,8 @@ permalink: /events/
 
     {# Additional Content from Markdown #}
     {% if eventsContent.content %}
-      <div class="prose prose-invert mx-auto mt-12">
+      {% set theme = siteSettings.theme or env.THEME or 'dark' %}
+      <div class="prose{% if theme == 'dark' %} prose-invert{% endif %} mx-auto mt-12">
         {{ eventsContent.content | renderMarkdown | safe }}
       </div>
     {% endif %}

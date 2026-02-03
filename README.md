@@ -17,6 +17,7 @@ A free, open-source template for creating hyper-local community newsletters. Bui
 - ✏️ **Easy Content Management** - Decap CMS for non-technical users
 - 🎨 **No-Code Branding** - Change site name, colors, and social links via CMS
 - 🔒 **More Secure Than WordPress** - No database = no database attacks
+- 🚀 **Multi-Site Support** - Deploy multiple sites from one repository
 
 ## Quick Start
 
@@ -42,6 +43,9 @@ pnpm setup
 
 # Start development (runs both 11ty and CMS proxy)
 pnpm dev:all
+
+# Start dev server and CMS proxy after building for target
+SITE_CONFIG=santa-fe-agenda pnpm dev:all
 ```
 
 Visit `http://localhost:3002` to see your site, and `http://localhost:3002/admin` to access the CMS.
@@ -67,11 +71,12 @@ This template supports multiple Netlify deployments from a single repository usi
 
 Set the `SITE_CONFIG` environment variable in your Netlify site settings to control which configuration is used:
 
-| Netlify Site    | Environment Variable     | Behavior                                              |
-| --------------- | ------------------------ | ----------------------------------------------------- |
-| Production Site | `SITE_CONFIG=atx-agenda` | Uses `config/atx-agenda.json`, removes template page  |
-| Marketing Site  | `SITE_CONFIG=marketing`  | Uses `config/marketing.json`, keeps template page     |
-| Customer Forks  | _(not set)_              | Removes template, uses defaults for CMS configuration |
+| Netlify Site    | Environment Variable          | Behavior                                              |
+| --------------- | ----------------------------- | ----------------------------------------------------- |
+| Production Site | `SITE_CONFIG=atx-agenda`      | Uses `config/atx-agenda.json`, removes template page  |
+| Marketing Site  | `SITE_CONFIG=marketing`       | Uses `config/marketing.json`, keeps template page     |
+| Santa Fe Site   | `SITE_CONFIG=santa-fe-agenda` | Uses `config/santa-fe-agenda.json`, light theme       |
+| Customer Forks  | _(not set)_                   | Removes template, uses defaults for CMS configuration |
 
 ### Configuration Files
 
@@ -79,12 +84,16 @@ Pre-configured settings are stored in `config/`:
 
 - `config/atx-agenda.json` - Production site configuration
 - `config/marketing.json` - Marketing/demo site configuration
+- `config/santa-fe-agenda.json` - Santa Fe site configuration (light theme)
 
 ### Local Testing
 
 ```bash
 # Test ATX Agenda build
 pnpm build:atx-agenda
+
+# Test Santa Fe Agenda build
+pnpm build:santa-fe-agenda
 
 # Test Marketing build
 pnpm build:marketing

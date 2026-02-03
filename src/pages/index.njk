@@ -28,7 +28,12 @@ permalink: /
   {% set gradientTop = (1 - heroOpacity) * 0.4 %}
   {% set gradientMid = (1 - heroOpacity) * 0.7 %}
   {% set gradientBottom = (1 - heroOpacity) * 0.95 %}
-  <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0, 0, 0, {{ gradientTop }}), rgba(0, 0, 0, {{ gradientMid }}), rgba(0, 0, 0, {{ gradientBottom }}));"></div>
+  {% set theme = siteSettings.theme or env.THEME or 'dark' %}
+  {% if theme == 'light' %}
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(255, 255, 255, {{ gradientTop }}), rgba(255, 255, 255, {{ gradientMid }}), rgba(255, 255, 255, {{ gradientBottom }}));"></div>
+  {% else %}
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0, 0, 0, {{ gradientTop }}), rgba(0, 0, 0, {{ gradientMid }}), rgba(0, 0, 0, {{ gradientBottom }}));"></div>
+  {% endif %}
 
   <div class="relative z-10 container mx-auto max-w-6xl">
     <div class="space-y-6 text-center">

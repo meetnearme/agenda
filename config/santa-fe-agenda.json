@@ -1,11 +1,11 @@
 {
-    "orgName": "ATX Agenda",
-    "tagline": "Your Weekly Guide to Austin Events",
-    "heroText": "AUSTIN EVENTS",
-    "eventsTitle": "Explore Austin Events",
-    "description": "Discover the best local events in Austin every week. Subscribe to ATX Agenda for curated weekly event guides delivered to your inbox.",
+    "orgName": "Santa Fe Agenda",
+    "tagline": "Your Weekly Guide to Santa Fe Events",
+    "heroText": "SANTA FE EVENTS",
+    "eventsTitle": "Explore Santa Fe Events",
+    "description": "Discover the best local events in Santa Fe every week. Subscribe to Santa Fe Agenda for curated weekly event guides delivered to your inbox.",
     "brandColor": "#a3e635",
-    "theme": "dark",
+    "theme": "light",
     "heroImages": {
         "left": "/content/home/cat_arts-community_00.jpeg",
         "right": "/content/home/cat_health-wellness_00.jpeg",
@@ -18,5 +18,5 @@
     },
     "eventsEmbed": "<div id=\"mnm-embed-container\"></div>\n<script src=\"https://static.meetnear.me/static/assets/embed.js\" data-event-owners=\"\" data-user-id=\"350373621882956150\"></script>",
     "removeTemplate": true,
-    "contentDir": "config/atx-agenda-content"
+    "contentDir": "config/santa-fe-agenda-content"
 }

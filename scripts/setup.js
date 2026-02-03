@@ -312,7 +312,8 @@ function applyConfiguration(config, configFilePath = null) {
         orgName: ['sitename', 'copyrightname'], // orgName maps to both sitename and copyrightname
         tagline: 'tagline',
         description: 'description',
-        heroText: 'herotext'
+        heroText: 'herotext',
+        theme: 'theme'
     };
 
     // Update YAML fields based on config - only if they exist in config

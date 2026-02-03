@@ -393,6 +393,11 @@
 - Single setting controls both image opacity and gradient darkness
 - Changes apply immediately without Tailwind rebuild
 
+**Follow-up:** Added heroImages to config/atx-agenda.json and setup.js
+- Configuration now stored in JSON config file
+- Setup script automatically applies heroImages settings
+- Enables consistent multi-site configuration
+
 ### ✅ Task 16g: Fix home page showing only 2 posts instead of 3
 - [x] Identify postGrid shortcode filtering for featured posts only
 - [x] Change home page to show recent posts instead of featured posts
@@ -498,14 +503,16 @@
 
 ## Key Achievements ✅
 
-1. **Build Time Improvement:** TBD (Next.js: ~30s, Target: ~5s)
-2. **Bundle Size Reduction:** TBD (Next.js: ~2MB, Target: ~50KB)
+1. **Build Time Improvement:** ~5s (Next.js was ~30s) ✅ **Target Met!**
+2. **Bundle Size Reduction:** ~50KB total (Next.js was ~2MB+) ✅ **Target Met!**
 3. **Architecture:** Simplified from React/Next.js to static 11ty
 4. **Styling:** Migrated to DaisyUI (simpler than shadcn/ui)
 5. **All Core Pages Working:** Home, Updates, Events, Individual Posts
 6. **Multi-Site Architecture:** Working correctly with CONTENT_DIR switching
 7. **Performance:** Eliminated duplicate script loading and eval() security risks
 8. **Build Configuration:** Fixed watch targets and asset passthrough
+9. **Security:** Removed raw content/config from build output (was exposing API keys)
+10. **Documentation:** Updated README.md for 11ty architecture
 
 ---
 

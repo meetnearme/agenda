@@ -3,6 +3,7 @@
   "tagline": "Your Weekly Guide to Local Events",
   "description": "A hyper-local events newsletter template built with Next.js, Tailwind CSS, and Decap CMS. Fork this project to create your own community newsletter.",
   "brandColor": "#a3e635",
+  "theme": "dark",
   "beehiiv": {
     "mode": "iframe",
     "embedCode": "",

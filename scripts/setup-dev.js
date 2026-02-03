@@ -17,7 +17,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT_DIR = path.join(__dirname, '..');
-const CONFIG_PATH = path.join(ROOT_DIR, 'config/atx-agenda.json');
+const SITE_CONFIG = process.env.SITE_CONFIG || 'atx-agenda';
+const CONFIG_MAP = {
+    'atx-agenda': 'config/atx-agenda.json',
+    marketing: 'config/marketing.json',
+    'santa-fe-agenda': 'config/santa-fe-agenda.json'
+};
+const CONFIG_PATH = path.join(
+    ROOT_DIR,
+    CONFIG_MAP[SITE_CONFIG] || 'config/atx-agenda.json'
+);
 
 console.log('\n');
 console.log('╔══════════════════════════════════════════════════════════════╗');
@@ -35,21 +44,28 @@ if (!fs.existsSync(CONFIG_PATH)) {
 
 const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
 
-console.log('📄 Using config: config/atx-agenda.json');
+console.log(`📄 Using config: ${path.relative(ROOT_DIR, CONFIG_PATH)}`);
 console.log(`📁 Content directory: ${config.contentDir || 'content'}`);
 console.log('');
 
 // Run the main setup script with the config
-execSync(`node scripts/setup.js --config config/atx-agenda.json`, {
+const configArgPath = path.relative(ROOT_DIR, CONFIG_PATH);
+execSync(`node scripts/setup.js --config ${configArgPath}`, {
     cwd: ROOT_DIR,
     stdio: 'inherit'
 });
 
-// Create .env.local with the content directory
+// Create .env.local with the content directory + theme
 const contentDir = config.contentDir || 'content';
+const theme = config.theme || 'dark';
 const envLocalPath = path.join(ROOT_DIR, '.env.local');
-fs.writeFileSync(envLocalPath, `CONTENT_DIR=${contentDir}\n`);
-console.log(`📝 Created .env.local with CONTENT_DIR=${contentDir}`);
+fs.writeFileSync(
+    envLocalPath,
+    `CONTENT_DIR=${contentDir}\nTHEME=${theme}\nSITE_CONFIG=${SITE_CONFIG}\n`
+);
+console.log(
+    `📝 Created .env.local with CONTENT_DIR=${contentDir} and THEME=${theme}`
+);
 
 console.log('');
 console.log('✅ Ready! Run the dev server:');
