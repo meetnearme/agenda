@@ -37,16 +37,15 @@ permalink: /
 
   <div class="relative z-10 container mx-auto max-w-6xl">
     <div class="space-y-6 text-center">
-      <h1 class="text-5xl font-bold tracking-tight text-balance md:text-7xl">
+      <h1 class="text-5xl font-bold tracking-tight text-balance md:text-7xl" style="text-shadow: 0 0 30px {% if theme == 'dark' %}rgba(0,0,0,0.6){% else %}rgba(255,255,255,0.8){% endif %}">
         YOUR WEEKLY GUIDE TO
         <br />
-        <span class="text-primary">
+        <span class="text-primary-adaptive">
           {{ siteSettings.herotext or 'LOCAL EVENTS' }}
         </span>
       </h1>
       <p class="mx-auto max-w-2xl text-xl text-balance md:text-2xl">
-        Discover the best live music, food festivals, art shows, and
-        community gatherings happening every week.
+        {{ homeContent.homequote or 'Discover the best live music, food festivals, art shows, and community gatherings happening every week.' }}
       </p>
 
       {# Newsletter Signup #}
