@@ -8,7 +8,6 @@ description: Your weekly roundup of the best events happening in Austin, from
 featuredpost: false
 ---
 
-
 ### Wednesday, February 4
 
 * **[Lakeway Nights Farmer’s Market](https://atxagenda.meetnear.me/event/bea21dcc-5648-4ce9-9e25-2dce092d4680)** – 3:00pm · Austin
@@ -71,9 +70,6 @@ featuredpost: false
 
 * **[Valentine’s Story Time & Craft](https://atxagenda.meetnear.me/event/3154ded5-9abe-4a36-aaec-c681474000e1)** – 10:30am · 2001 Justin Lane
   A festive storytime and craft session for kids
-
-* **[The Muslim Brotherhood, CAIR & Networks Working to Influence Western Civilization & Destabilize TX](https://atxagenda.meetnear.me/event/391c0574-ae42-41be-9537-00b47f60961e)** – 11:30am · Austin
-  A discussion-focused event examining political and civic issues
 
 * **[AcroYoga Class (Not for Beginners)](https://atxagenda.meetnear.me/event/0979910f-ea5d-471c-b7a0-87b45ad3e474)** – 8:00pm · Impact Martial Arts (North Austin)
   Advanced partner-based acro practice for experienced students
