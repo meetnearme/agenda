@@ -2,10 +2,11 @@
 templatekey: events-page
 title: Explore Austin Events
 subtitle: Browse and discover events happening in your area right now
-embedcode: >
-  <div id="mnm-embed-container"></div>
-
-  <script src="https://static.meetnear.me/static/assets/embed.js" data-location="radius=100&lat=30.3038&lon=-97.7545&location=Austin%2C+Texas" data-event-owners="" data-user-id="350373621882956150"></script>
+embedcode: <script id="mnm-embed-script"
+  src="https://static.meetnear.me/static/assets/embed.js"
+  data-user-id="350373621882956150" data-event-owners=""
+  data-location="lat=30.267153&location=Austin%2C+TX%2C+USA&lon=-97.743061"
+  data-radius="50"></script>
 instructionstitle: How to add your Meet Near Me embed
 instructions:
   - Get your embed code from Meet Near Me platform
