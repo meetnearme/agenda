@@ -1,7 +1,7 @@
 ---
 templatekey: update-post
 title: Austin Events This Week (Mar 19 - 24)
-date: 2026-03-18T07:32:00.000+01:00
+date: 2026-03-18T07:33:00.000+01:00
 description: Your weekly roundup of the best events happening in Austin this week.
 featuredpost: false
 ---
