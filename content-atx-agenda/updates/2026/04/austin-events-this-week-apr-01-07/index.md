@@ -8,7 +8,6 @@ featuredpost: false
 ---
 ### April 1
 
-* [Wednesday Hikes in the Upper Barton Creek Greenbelt Starting at 9:30 AM](https://atxagenda.meetnear.me/event/5ec7a9c4-8b51-411a-aa74-c05a79dfffa1) - 9:30am: Guided hike through the Barton Creek Greenbelt
 * [Wednesday Morning Italian Meetup at Central Market South](https://atxagenda.meetnear.me/event/716a4828-24b5-4c42-9efb-b2ba5600f74e) - 10:00am: Casual meetup to practice Italian and connect
 * [Shut Up and Write at Lazarus Brewing Co Airport Blvd](https://atxagenda.meetnear.me/event/04f92080-1ac8-4313-945c-461e67852260) - 10:00am: Focused group writing session
 
