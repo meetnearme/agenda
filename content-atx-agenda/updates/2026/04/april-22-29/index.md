@@ -1,6 +1,6 @@
 ---
 templatekey: update-post
-title: April 22 - 29
+title: April 22 - 29 | Robotics, Live Music & More
 date: 2026-04-22T07:48:00.000+01:00
 description: Here is what is happening in Austin this week, from tech talks and
   writers workshops to hikes, meditation sessions, and live music.
@@ -57,3 +57,6 @@ featuredpost: false
 ---
 
 That is your Austin agenda for this week!
+Find more events at Meet Near Me.
+
+Have an event to share? Reply to this email or tag us @atxagenda.
