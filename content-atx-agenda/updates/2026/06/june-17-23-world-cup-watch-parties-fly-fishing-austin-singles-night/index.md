@@ -61,3 +61,10 @@ featuredpost: false
 - [Digital Literacy — 1:30 PM](https://atxagenda.meetnear.me/event/2615f347-ecfe-437f-9e86-8dcc333f49c4)
 
 - [West African Dance Class - Ballet Austin (with Jean-Claude Lessou) — 7:30 PM](https://atxagenda.meetnear.me/event/c57d23fb-567f-4606-9384-92b101beb2b6)
+---
+
+That’s your Austin agenda for this week!
+
+Find more events at **[Meet Near Me](https://atxagenda.meetnear.me)**.
+
+Have an event to share? Reply to this email or tag us **@atxagenda**.
