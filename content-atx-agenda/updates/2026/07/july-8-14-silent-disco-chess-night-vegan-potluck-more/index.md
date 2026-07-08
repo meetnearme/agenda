@@ -10,7 +10,7 @@ description: Here's your Austin Agenda for the week! From social mixers and live
 featuredpost: false
 ---
 
-
+## July 8
 * [Austin Startup Connections — 6:00 PM](https://atxagenda.meetnear.me/event/6185f7fc-4d57-44b7-9d5b-94a31ad8dcbc)
 
 * [Opening: Darla Barolini | The Classroom — 7:00 PM](https://atxagenda.meetnear.me/event/772ae5ff-c506-4e7a-9cab-25999011360b)
